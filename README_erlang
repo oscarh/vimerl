@@ -1,0 +1,62 @@
+Vim Erlang plugin
+
+This is a pre-release!!!
+Treat it as such and please report problems to oscar@oscarh.net
+
+Installation:
+* Unix
+	- For local installation (one user only) extract the vim_erlang.tgz
+	  to your ~/.vim directory
+	- For global installation extract the vim_erlang.tgz to your
+	  vim runtime directory (e.g. /usr/share/vim/vimX/)
+
+* Win
+	- For local installation (one user only) extract the vim_erlang.tgz
+	  to your directory
+	- For global installation extract the vim_erlang.tgz to your
+	  to your directory
+
+* Highlighting of Erlang function heads
+	- You need to add the Highlight definition "ErlangFunHead" to your color
+	  scheme if you want to use the highlighting of function heads.
+
+Settings:
+You can set various variables in your vimrc file to make the plugin behave
+differently.
+
+Syntax options:
+The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
+
+* Highlight all Erlang bifs as keywords: (default: 0)
+	g:erlangHighlightBif 
+* Highlight function heads (you need to edit your color scheme, default: 0)
+	g:erlangHighlightFunHead (default: 0)
+* Highlight words (identifiers, key- / reserved words, default: 1)
+	g:erlangHighLightWords
+* Highlight Erlang operators (default: 1)
+	g:erlangHighLightOperators=0
+
+Folding options:
+The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
+
+* Enable/disable folding: (default: 1)
+	g:erlangFold
+* Splitting functions if a new function head appears: (default: 0)
+	g:erlangFoldSplitFunction
+
+Compiler options:
+Options expect a string.
+
+* Specifying the complier to use
+	g:erlangCompiler (default: "emake")
+	Values:
+		- "emake"
+			Will call erl -make at the directory above the current
+			working	directory
+			Expects all erlang sources to exist in src/
+		- "erlc"
+			Calls erlc with the current file as argument
+			Also adds -I ../include
+		- "erlc-debug"
+			Calls erlc with the current file as argument
+			Also adds -I ../include and +debug_info
