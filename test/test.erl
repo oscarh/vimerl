@@ -20,8 +20,6 @@ start() -> foo(), bar().
 foo(#foo{bar = Bar, test = Test}) ->
 	foo([1,2,3]).
 
-bar().
-
 % aoeunth\aoeunth
 foo([H | List]) when not is_list(List) ->
 	List-List andalso (not X or Y) orelse Bar,
@@ -33,6 +31,11 @@ foo([H | List]) when not is_list(List) ->
 	1 * 2/23+23-23,
 	(((1 < 2) =:= (2 >= 2)) =/= (2 /= 2)) == true,
 	yes,
+	case catch foo(bar) of
+		X or Y -> fun bar/2;
+		foo    -> exit(normal)
+	end,
+	2#23 - 1.34e-2 + 2.23e2 div 1.5,
 	"{\"foobar",
 	Pid ! foo,
 	?aeo,

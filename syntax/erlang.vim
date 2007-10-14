@@ -27,22 +27,24 @@ syn match erlangArityDelimiter               /\/\|,/ contained
 syn match erlangStringModifier               /\\./ contained
 syn match erlangModifier                     /\$\\\?./
 
-syn match erlangInteger                      /[0-9]\+/
-syn match erlangFloat                        /[0-9]\+\.[0-9]\+/
+syn match erlangInteger                      /[0-9]\+#[0-9a-f]\+\|[0-9]\+/
+syn match erlangFloat                        /[0-9]\+\.[0-9]\+\%(e-\?[0-9]\+\)\?/
 
 syn keyword erlangTodo                       TODO FIXME XXX contained
 syn match erlangComment                      /%.*$/ contains=@Spell,erlangTodo
 
-syn keyword erlangKeyword                    not and or andalso orelse
 syn keyword erlangKeyword                    band bor bnot bsl bsr bxor div rem xor
+syn keyword erlangKeyword                    try catch begin receive after cond fun let query
 
 syn keyword erlangContitional                case if of end
+syn keyword erlangContitional                not and or andalso orelse
 
 syn keyword erlangGuard                      is_list is_atom is_binary is_tuple is_number is_integer is_float
 
 syn match erlangOperator                     /\/\|*\|+\|-\|++\|--/
 syn match erlangOperator                     /->\|<-\|||\||\|!\|=/
 syn match erlangOperator                     /=:=\|==\|\/=\|=\/=\|<\|>\|=<\|>=/
+syn keyword erlangOperator                   div rem
 
 syn region erlangString                      start=/\\\@<!"/ end=/\\\@<!"/ contains=@Spell, erlangStringModifier
 
