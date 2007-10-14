@@ -36,6 +36,7 @@ foo([H | List]) when not is_list(List) ->
 		foo    -> exit(normal)
 	end,
 	2#23 - 1.34e-2 + 2.23e2 div 1.5,
+	<<Variable:16, 23:8/binary>>,
 	"{\"foobar",
 	Pid ! foo,
 	?aeo,

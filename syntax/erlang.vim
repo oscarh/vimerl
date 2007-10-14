@@ -64,6 +64,11 @@ syn region erlangPreCondit                   start=/^-\%(ifdef\|ifndef\|endif\)(
 
 syn match erlangMacro                        /?\w\+/
 
+syn match erlangBitType                      /\/\@<=\%(binary\|integer\|float\)/ contained
+syn match erlangBitVariable                  /\<\%([0-9]\+\|[A-Z]\w\+\)/ contained
+syn match erlangBitSize                      /:\@<=[0-9]\+/ contained
+syn match erlangBinary                       /<<.*>>/ contains=erlangBitVariable,erlangDelimiter,erlangBitType,erlangBitSize,erlangBitError
+
 " Link Erlang stuff to Vim groups {{{1
 hi link erlangTodo           Todo
 hi link erlangString         String
@@ -98,6 +103,10 @@ hi link erlangFun            Keyword
 hi link erlangList           Structure
 hi link erlangArityList      Structure
 hi link erlangTuple          Structure
+hi link erlangBinary         Structure
+hi link erlangBitVariable    Identifier
+hi link erlangBitType        Type
+hi link erlangBitSize        Number
 
 " }}}
 
