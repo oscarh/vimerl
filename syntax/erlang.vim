@@ -25,7 +25,7 @@ syn match erlangDelimiter                    /\|,\|\.\|;/
 syn match erlangArityDelimiter               /\/\|,/ contained
 
 syn match erlangStringModifier               /\\./ contained
-syn match erlangModifier                     /\$\%(\\ \|.\)/
+syn match erlangModifier                     /\$\\\?./
 
 syn match erlangInteger                      /[0-9]\+/
 syn match erlangFloat                        /[0-9]\+\.[0-9]\+/

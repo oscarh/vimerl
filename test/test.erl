@@ -22,6 +22,7 @@ foo(#foo{bar = Bar, test = Test}) ->
 
 bar().
 
+% aoeunth\aoeunth
 foo([H | List]) when not is_list(List) ->
 	List-List andalso (not X or Y) orelse Bar,
 	23.23,
@@ -36,7 +37,7 @@ foo([H | List]) when not is_list(List) ->
 	Pid ! foo,
 	?aeo,
 	$a,
-	[$\ , $B],
+	[$\ , $B, $\B],
 	#foobar{Xyz, baz, Baz},
 	[X || X <- lists:seq(2,5)],
 	case foobar(Ost) of
