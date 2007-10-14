@@ -39,7 +39,9 @@ syn keyword erlangKeyword                    try catch begin receive after cond 
 syn keyword erlangContitional                case if of end
 syn keyword erlangContitional                not and or andalso orelse
 
-syn keyword erlangGuard                      is_list is_atom is_binary is_tuple is_number is_integer is_float
+syn keyword erlangBoolean                    true false
+
+syn keyword erlangGuard                      is_list is_atom is_binary is_tuple is_number is_integer is_float is_function is_constant is_pid is_port is_reference is_record
 
 syn match erlangOperator                     /\/\|*\|+\|-\|++\|--/
 syn match erlangOperator                     /->\|<-\|||\||\|!\|=/
@@ -90,6 +92,7 @@ hi link erlangDelimiter      Delimiter
 hi link erlangOperator       Operator
 hi link erlangContitional    Conditional
 hi link erlangGuard          Conditional
+hi link erlangBoolean        Boolean
 hi link erlangAtom           Normal
 hi link erlangRecord         Structure
 hi link erlangInteger        Number

@@ -41,6 +41,7 @@ foo([H | List]) when not is_list(List) ->
 	Pid ! foo,
 	?aeo,
 	$a,
+	true, 
 	[$\ , $B, $\B],
 	#foobar{Xyz, baz, Baz},
 	[X || X <- lists:seq(2,5)],
