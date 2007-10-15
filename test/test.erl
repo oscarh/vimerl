@@ -25,6 +25,7 @@ foo([H | List]) when not is_list(List) ->
 	List-List andalso (not X or Y) orelse Bar,
 	23.23,
 	1 bsl 2,
+	foo:bar(),
 	foo_bar(23), % and me?
 	1 = 2,
 	([1,2] ++ [3,4]) -- [5],
@@ -36,12 +37,13 @@ foo([H | List]) when not is_list(List) ->
 		foo    -> exit(normal)
 	end,
 	2#23 - 1.34e-2 + 2.23e2 div 1.5,
-	<<Variable:16, 23:8/binary>>,
 	"{\"foobar",
 	Pid ! foo,
 	?aeo,
 	$a,
 	true, 
+	"Yes this is \" true",
+	<<Variable:16, 23:8/binary>>,
 	[$\ , $B, $\B],
 	#foobar{Xyz, baz, Baz},
 	[X || X <- lists:seq(2,5)],
@@ -52,6 +54,7 @@ foo([H | List]) when not is_list(List) ->
 			Bar == 2 -> bar
 		end
 	end,
+	exit(foo),
 	[onth, Ost],
 	'fooBarZ-aou,2',
 	bar(List).

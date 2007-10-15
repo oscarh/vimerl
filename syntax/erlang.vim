@@ -21,9 +21,6 @@ endif
 " Erlang is case sensitive
 syn case match
 
-syn match erlangDelimiter                    /\|,\|\.\|;/
-syn match erlangArityDelimiter               /\/\|,/ contained
-
 syn match erlangStringModifier               /\\./ contained
 syn match erlangModifier                     /\$\\\?./
 
@@ -36,40 +33,45 @@ syn match erlangComment                      /%.*$/ contains=@Spell,erlangTodo
 syn keyword erlangKeyword                    band bor bnot bsl bsr bxor div rem xor
 syn keyword erlangKeyword                    try catch begin receive after cond fun let query
 
-syn keyword erlangContitional                case if of end
-syn keyword erlangContitional                not and or andalso orelse
+syn keyword erlangConditional                case if of end
+syn keyword erlangConditional                not and or andalso orelse
+syn keyword erlangConditional                when
 
 syn keyword erlangBoolean                    true false
 
-syn keyword erlangGuard                      is_list is_atom is_binary is_tuple is_number is_integer is_float is_function is_constant is_pid is_port is_reference is_record
+syn keyword erlangGuard                      is_list is_atom is_binary is_boolean is_tuple is_number is_integer is_float is_function is_constant is_pid is_port is_reference is_record is_process_alive
 
 syn match erlangOperator                     /\/\|*\|+\|-\|++\|--/
 syn match erlangOperator                     /->\|<-\|||\||\|!\|=/
 syn match erlangOperator                     /=:=\|==\|\/=\|=\/=\|<\|>\|=<\|>=/
 syn keyword erlangOperator                   div rem
 
-syn region erlangString                      start=/\\\@<!"/ end=/\\\@<!"/ contains=@Spell, erlangStringModifier
+syn region erlangString                      start=/"/ end=/"/ skip=/\\/ contains=@Spell,erlangStringModifier
+syn region erlangNoSpellString               start=/"/ end=/"/ skip=/\\/ contained contains=erlangStringModifier
 
 syn match erlangVariable                     /\<[A-Z_]\w*\>/
 syn match erlangAtom                         /\%(\%(^-\)\|#\)\@<!\<[a-z]\w*\>(\@!/
 syn match erlangAtom                         /\\\@<!'.*\\\@<!'/
 
 syn match erlangRecord                       /#\w\+/
-syn match erlangTuple                        /{\|}/
-syn match erlangList                        /\[\|\]/
-syn region erlangArityList                   start="\[" end="\]" contains=erlangAtom,erlangInteger,erlangArityDelimiter contained
 
-syn keyword erlangKeyword                    when
-syn region erlangAttribute                   start=/^-\%(vsn\|author\|copyright\|compile\|module\|export\)(/ end=/)\.\@=/ contains=erlangArityList,erlangAtom,erlangString
+syn match erlangTuple                        /{\|}/
+syn match erlangList                         /\[\|\]/
+
+syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|module\|export\|import\)(\@=/
+syn region erlangInclude                     start=/^-include\%(_lib\)\?(/ end=/)\.\@=/ contains=erlangNoSpellString
 syn region erlangDefine                      start=/^-define(/ end=/)\.\@=/
 syn region erlangPreCondit                   start=/^-\%(ifdef\|ifndef\|endif\)(/ end=/)\.\@=/
 
 syn match erlangMacro                        /?\w\+/
 
+syn match erlangBitDelimiter                 /:\|,/
 syn match erlangBitType                      /\/\@<=\%(binary\|integer\|float\)/ contained
 syn match erlangBitVariable                  /\<\%([0-9]\+\|[A-Z]\w\+\)/ contained
 syn match erlangBitSize                      /:\@<=[0-9]\+/ contained
-syn match erlangBinary                       /<<.*>>/ contains=erlangBitVariable,erlangDelimiter,erlangBitType,erlangBitSize,erlangBitError
+syn region erlangBinary                      start=/<</ end=/>>/ contains=erlangBitVariable,erlangBitType,erlangBitSize,erlangBitError,erlangBitDelimiter
+
+syn match erlangBIF                          /\<\%(abs\|apply\|atom_to_list\|binary_to_list\|binary_to_term\|check_process_code\|concat_binary\|date\|delete_module\|disconnect_node\|element\|erase\|exit\|float\|float_to_list\|garbage_collect\|get\|get_keys\|group_leader\|halt\|hd\|integer_to_list\|iolist_to_binary\|iolist_size\|length\|link\|list_to_atom\|list_to_binary\|list_to_existing_atom\|list_to_float\|list_to_integer\|list_to_pid\|list_to_tuple\|load_module\|make_ref\|monitor_node\|node\|nodes\|now\|open_port\|pid_to_list\|port_close\|port_command\|port_connect\|port_control\|pre_loaded\|process_flag\|process_info\|processes\|purge_module\|put\|register\|registered\|round\|self\|setelement\|size\|spawn\|spawn_link\|spawn_opt\|split_binary\|statistics\|term_to_binary\|throw\|time\|tl\|trunc\|tuple_to_list\|unlink\|unregister\|whereis\)(\@=/
 
 " Link Erlang stuff to Vim groups {{{1
 hi link erlangTodo           Todo
@@ -88,9 +90,9 @@ hi link erlangDefine         Define
 hi link erlangPreCondit      PreCondit
 hi link erlangPreProc        PreProc
 hi link erlangDelimiter      Delimiter
-"hi link erlangDelimiter      Normal
+hi link erlangBitDelimiter   Normal
 hi link erlangOperator       Operator
-hi link erlangContitional    Conditional
+hi link erlangConditional    Conditional
 hi link erlangGuard          Conditional
 hi link erlangBoolean        Boolean
 hi link erlangAtom           Normal
@@ -101,11 +103,10 @@ hi link erlangFloat          Number
 hi link erlangFloat          Number
 hi link erlangFloat          Number
 hi link erlangHex            Number
-hi link erlangBIF            Function
+hi link erlangBIF            Keyword
 hi link erlangFun            Keyword
-hi link erlangList           Structure
-hi link erlangArityList      Structure
-hi link erlangTuple          Structure
+hi link erlangList           Delimiter
+hi link erlangTuple          Delimiter
 hi link erlangBinary         Structure
 hi link erlangBitVariable    Identifier
 hi link erlangBitType        Type
