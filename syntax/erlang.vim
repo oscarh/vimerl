@@ -1,31 +1,11 @@
 " Vim syntax file
 " Language:   Erlang
 " Maintainer: Oscar Hellström <oscar@oscarh.net>
-" URL:        http://personal.oscarh.net
-" Version:    2006-06-28
-" ------------------------------------------------------------------------------
-" Thanks to Kre¹imir Mar¾iæ (Kresimir Marzic) <kmarzic@fly.srk.fer.hr>,
-" stole some stuff from his syntax for erlang
+" URL:        http://oscar.hellstrom.st
+" Version:    2007-10-12
 " ------------------------------------------------------------------------------
 " {{{1
 " Options:
-"
-" To enable BIF highlighting put 
-" let g:erlangHighlightBif=1
-" in your vimrc file
-"
-" To get function head highlighting working, add a definition for 
-" "ErlangFunHead" to your color scheme file and also put
-" g:erlangHighlightFunHead=1
-" in your vimrc file.
-"
-" To disable highlighting words (Identifiers / key-/reserved words put 
-" g:erlangHighLightWords=0
-" in your vimrc file.
-" 
-" To disable highlighting operators put
-" g:erlangHighLightOperators=0
-" in your vimrc file.
 " }}}
 " -----------------------------------------------------------------------------
 
@@ -41,172 +21,101 @@ endif
 " Erlang is case sensitive
 syn case match
 
-" Need to use - in keywords
-setlocal iskeyword+=-
+syn match erlangStringModifier               /\\./ contained
+syn match erlangModifier                     /\$\\\?./
 
-" Comments {{{1
-" TODO / FIXME etc.
-syn keyword erlangTodo          TODO FIXME contained
-syn match erlangComment          /%.*/ contains=erlangTodo,@Spell
+syn match erlangInteger                      /[0-9]\+#[0-9a-f]\+\|[0-9]\+/
+syn match erlangFloat                        /[0-9]\+\.[0-9]\+\%(e-\?[0-9]\+\)\?/
 
-" Preprocessor stuff {{{1
-syn keyword erlangInclude        -include -include_lib -import
-syn keyword erlengDefine         -define -undef
-syn keyword erlangPreProc        -record
-syn keyword erlangPreCondit      -ifdef -ifndef -else -endif
-syn match erlangMacro            /?[0-9A-Za-z_-]\+/
+syn keyword erlangTodo                       TODO FIXME XXX contained
+syn match erlangComment                      /%.*$/ contains=@Spell,erlangTodo
 
-" Module attributes {{{1
-syn keyword erlangAttribute      -compile -module -export -behaviour -author -vsn
-syn keyword erlangAttribute      -doc -copyright -file
+syn keyword erlangKeyword                    band bor bnot bsl bsr bxor div rem xor
+syn keyword erlangKeyword                    try catch begin receive after cond fun let query
 
-" String modifiers {{{1
-syn match erlangModifier         /\~\a\|\\\a/ contained
+syn keyword erlangConditional                case if of end
+syn keyword erlangConditional                not and or andalso orelse
+syn keyword erlangConditional                when
 
-" Sparator {{{1
-syn match erlangSeparator        /\.\|#/
+syn keyword erlangBoolean                    true false
 
-" Numbers {{{1
-syn match erlangInteger    "[a-zA-Z]\@<![+-]\=\d\+[a-zA-Z]\@!"           contains=erlangSeparator
-syn match erlangFloat      "[a-zA-Z]\@<![+-]\=\d\+.\d\+[a-zA-Z]\@!"      contains=erlangSeparator
-syn match erlangFloat      "[a-zA-Z]\@<![+-]\=\d\+\(.\d\+\)\=[eE][+-]\=\d\+\(.\d\+\)\=[a-zA-Z]\@!" contains=erlangSeparator
-syn match erlangFloat      "[a-zA-Z]\@<![+-]\=\d\+[#]\x\+[a-zA-Z]\@!"    contains=erlangSeparator
-syn match erlangFloat      "[a-zA-Z]\@<![+-]\=[eE][+-]\=\d\+[a-zA-Z]\@!" contains=erlangSeparator
-syn match erlangHex        "[a-zA-Z]\@<!$\x\+[a-zA-Z]\@!"                contains=erlangSeparator
+syn keyword erlangGuard                      is_list is_atom is_binary is_boolean is_tuple is_number is_integer is_float is_function is_constant is_pid is_port is_reference is_record is_process_alive
 
-" Variables {{{1
-syn match erlangIdentifier       /\<\(\u\|_\)\w*\>/
+syn match erlangOperator                     /\/\|*\|+\|-\|++\|--/
+syn match erlangOperator                     /->\|<-\|||\||\|!\|=/
+syn match erlangOperator                     /=:=\|==\|\/=\|=\/=\|<\|>\|=<\|>=/
+syn keyword erlangOperator                   div rem
 
-" Atoms {{{1
-syn region erlangAtom            start=/'/ end=/'/ contained
+syn region erlangString                      start=/"/ end=/"/ skip=/\\/ contains=@Spell,erlangStringModifier
 
-" Records {{{1
-syn match erlangRecord          /#\a\w*\>/
+syn match erlangVariable                     /\<[A-Z_]\w*\>/
+syn match erlangAtom                         /\%(\%(^-\)\|#\)\@<!\<[a-z]\w*\>(\@!/
+syn match erlangAtom                         /\\\@<!'.*\\\@<!'/
 
-" String {{{1
-syn region erlangString    start=/"/ skip=/\\"/ end=/"/ contains=erlangModifier
+syn match erlangRecord                       /#\w\+/
 
-" Delimiters {{{1
-syn match erlangDelimiter        /:/
+syn match erlangTuple                        /{\|}/
+syn match erlangList                         /\[\|\]/
 
-" Data structures {{{1
-syn region erlangList  matchgroup=Normal start=/\[/ end=/\]/ contained contains=erlangIdentifier,erlangAtom,elangList,erlangTuple
-syn region erlangTuple matchgroup=Normal start=/{/ end=/}/ contained contains=erlangIdentifier,erlangAtom,erlangList,erlangTuple
+syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|module\|export\|import\)(\@=/
+syn match erlangInclude                      /^-include\%(_lib\)\?(\@=/
+syn match erlangDefine                       /^-define(\@=/
+syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|endif\)(\@=/
 
-" Keywords {{{1
-if (!exists("g:erlangHighLightWords")) || g:erlangHighLightWords
-	" Conditions
-	syn keyword erlangContitional    if else case of end not andalso orelse and or 
-	syn keyword erlangContitional    receive after
+syn match erlangMacro                        /\%(-define(\)\@<=\w\+/
+syn match erlangMacro                        /?\w\+/
 
-	" Exceptions
-	syn keyword erlangException      try catch begin
+syn match erlangBitDelimiter                 /:\|,/
+syn match erlangBitType                      /\/\@<=\%(binary\|integer\|float\)/ contained
+syn match erlangBitVariable                  /\<\%([0-9]\+\|[A-Z]\w\+\)/ contained
+syn match erlangBitSize                      /:\@<=[0-9]\+/ contained
+syn region erlangBinary                      start=/<</ end=/>>/ contains=erlangBitVariable,erlangBitType,erlangBitSize,erlangBitError,erlangBitDelimiter
 
-	" Funs 
-	syn match erlangFun            ':\@<!fun(\@='
-
-	" Reserved words
-	syn keyword erlangKeyword        cond query let 
-endif
-
-" Operators {{{1
-if (!exists("g:erlangHighLightOperators")) || g:erlangHighLightOperators
-	syn match   erlangOperator       "+\|-\|*\|/"
-	syn match   erlangOperator       "==\|/=\|=:=\|=/=\|<\|=<\|>\|>="
-	syn match   erlangOperator       /++\|--\|=\|!\|<-/
-	syn keyword erlangOperator       band bnot bor bsl bsr bxor div rem xor
-endif
-
-" All erlang BIF:s (as of R11B) {{{1
-" Not highlighted by default
-if exists("g:erlangHighlightBif") && g:erlangHighlightBif
-" BIF:s
-    syn match erlangBIF ':\@<!\<\(abs\|append_element\|apply\|atom_to_list\)(\@='
-	syn match erlangBIF ':\@<!\<\(binary_to_list\|binary_to_term\|bump_reductions\)(\@='
-	syn match erlangBIF ':\@<!\<\(cancel_timer\|check_process_code\|date\)\>(\@='
-	syn match erlangBIF ':\@<!\<\(delete_module\|demonitor\|disconnect_node\|display\)(\@='
-	syn match erlangBIF ':\@<!\<\(erase\|exit\|fault\|float\|float_to_binary\)(\@='
-	syn match erlangBIF ':\@<!\<\(fun_info\|fun_to_list\|garbage_collect\|get\)(\@='
-	syn match erlangBIF ':\@<!\<\(get_keys\|group_leader\|halt\|hash\|hd\|hibernate\)(\@='
-	syn match erlangBIF ':\@<!\<\(integer_to_list\|is_alive\|is_builtin\)(\@='
-	syn match erlangBIF ':\@<!\<\(length\|link\|list_to_atom\|list_to_binary\|list_to_float\)(\@='
-	syn match erlangBIF ':\@<!\<\(list_to_integer\|list_to_pid\|list_to_tuple\|load_module\)(\@='
-	syn match erlangBIF ':\@<!\<\(loaded\|localtime\|localtime_to_universaltime\|make_ref\)(\@='
-	syn match erlangBIF ':\@<!\<\(make_tuple\|md5\|md5_final\|md5_init\|md5_update\|memory\)(\@='
-	syn match erlangBIF ':\@<!\<\(module_loaded\|monitor\|monitor_node\|node\|nodes\|now\)(\@='
-	syn match erlangBIF ':\@<!\<\(open_port\|phash\|phash2\|pid_to_list\|port_close\)(\@='
-	syn match erlangBIF ':\@<!\<\(port_command\|port_connect\|port_control\|port_call\)(\@='
-	syn match erlangBIF ':\@<!\<\(port_info\|port_to_list\|ports\|pre_loaded\|element\)(\@='
-	syn match erlangBIF ':\@<!\<\(process_flag\|process_info\|processes\|purge_module\)(\@='
-	syn match erlangBIF ':\@<!\<\(put\|read_timer\|ref_to_list\|register\|registered\)(\@='
-	syn match erlangBIF ':\@<!\<\(resume_process\|round\|self\|send\|send_after\|spawn\)(\@='
-	syn match erlangBIF ':\@<!\<\(send_nosuspend\|set_cookie\|setelement\|size\|spawn_link\)(\@='
-	syn match erlangBIF ':\@<!\<\(spawn_opt\|split_binary\|start_timer\|statistics\)(\@='
-	syn match erlangBIF ':\@<!\<\(suspend_process\|system_flag\|system_info\|system_monitor\)(\@='
-	syn match erlangBIF ':\@<!\<\(term_to_binary\|time\|tl\|trace\|trace_info\|trace_pattern\)(\@='
-	syn match erlangBIF ':\@<!\<\(trace_pattern\|trunc\|tuple_to_list\|universaltime\)(\@='
-	syn match erlangBIF ':\@<!\<\(universaltime_to_localtime\|unlink\|unregister\|whereis\)(\@='
-	syn match erlangBIF ':\@<!\<\(yield\|process_display\|send_nosuspend\|binary_to_float\)(\@='
-	syn match erlangBIF ':\@<!\<\(ncat_binary\|loat_to_list\|get_cookie\|info\)(\@='
-	syn match erlangBIF ':\@<!\<\(is_process_alive\)(\@='
-
-endif
-
-" BIF:s used in guards, all contained in guard expressions {{{1
-syn keyword erlangGBIF is_atom is_binary is_constant             contained
-syn keyword erlangGBIF is_float is_function is_integer is_list   contained
-syn keyword erlangGBIF is_number is_pid is_port is_reference     contained
-syn keyword erlangGBIF is_tuple is_record                        contained
-
-syn keyword erlangGBIF atom binary constant float function       contained
-syn keyword erlangGBIF integer list number pid port reference    contained
-syn keyword erlangGBIF tuple record                              contained
-syn keyword erlangGBIF abs element float hd length node          contained
-syn keyword erlangGBIF round self size tl trunc                  contained
-
-
-" Function heads {{{1
-if  exists("g:erlangHighlightFunHead") && g:erlangHighlightFunHead
-	"syn region erlangGuardArgs start=/(/ end=/)/ contains=erlangIdentifier contained
-	syn region erlangGuard     start=/when/ end=/->/ contains=erlangGBIF,erlangInteger,erlangFloat,erlangIdentifier
-	syn region erlangFunArgs   start=/(/ end=/)/ contains=erlangIdentifier,erlangList,erlangTuple,erlangString contained 
-	syn region erlangFunHead   start='^\a[0-9A-Za-z_-]*(' end=')' contains=erlangFunArgs keepend
-endif
+" BIFS
+syn match erlangBIF                          /\<\%(abs\|apply\|atom_to_list\|binary_to_list\|binary_to_term\|check_process_code\|concat_binary\|date\|delete_module\|disconnect_node\|element\|erase\|exit\|float\|float_to_list\|garbage_collect\|get\|get_keys\|group_leader\|halt\|hd\|integer_to_list\|iolist_to_binary\|iolist_size\|length\|link\|list_to_atom\|list_to_binary\|list_to_existing_atom\|list_to_float\|list_to_integer\|list_to_pid\|list_to_tuple\|load_module\|make_ref\|monitor_node\|node\|nodes\|now\|open_port\|pid_to_list\|port_close\|port_command\|port_connect\|port_control\|pre_loaded\|process_flag\|process_info\|processes\|purge_module\|put\|register\|registered\|round\|self\|setelement\|size\|spawn\|spawn_link\|spawn_opt\|split_binary\|statistics\|term_to_binary\|throw\|time\|tl\|trunc\|tuple_to_list\|unlink\|unregister\|whereis\)(\@=/
 
 " Link Erlang stuff to Vim groups {{{1
-hi link erlangTodo         Todo
-hi link erlangString       String
-hi link erlangModifier     SpecialChar
-hi link erlangComment      Comment
-hi link erlangIdentifier   Identifier
-hi link erlangInclude      Include
-hi link erlangAttribute    Keyword
-hi link erlangGBIF         Keyword
-hi link erlangKeyword      Keyword
-hi link erlangMacro        Macro
-hi link erlengDefine       Define
-hi link erlangPreCondit    PreCondit
-hi link erlangPreProc      PreProc
-hi link erlangDelimiter    Delimiter
-hi link erlangOperator     Operator
-hi link erlangContitional  Conditional
-hi link erlangGuard        Conditional
-hi link erlangAtom         Structure
-hi link erlangRecord       Structure
-hi link erlangInteger      Number
-hi link erlangFloat        Number
-hi link erlangFloat        Number
-hi link erlangFloat        Number
-hi link erlangFloat        Number
-hi link erlangHex          Number
-hi link erlangBIF          Function
-hi link erlangFun          Keyword
-hi link erlangList         Normal
-hi link erlangTuple        Normal
+hi link erlangTodo           Todo
+hi link erlangString         String
+hi link erlangNoSpellString  String 
+hi link erlangModifier       SpecialChar
+hi link erlangStringModifier SpecialChar
+hi link erlangComment        Comment
+hi link erlangVariable       Identifier
+hi link erlangInclude        Include
+hi link erlangAttribute      Keyword
+hi link erlangGBIF           Keyword
+hi link erlangKeyword        Keyword
+hi link erlangMacro          Macro
+hi link erlangDefine         Define
+hi link erlangPreCondit      PreCondit
+hi link erlangPreProc        PreProc
+hi link erlangDelimiter      Delimiter
+hi link erlangBitDelimiter   Normal
+hi link erlangOperator       Operator
+hi link erlangConditional    Conditional
+hi link erlangGuard          Conditional
+hi link erlangBoolean        Boolean
+hi link erlangAtom           Normal
+hi link erlangRecord         Structure
+hi link erlangInteger        Number
+hi link erlangFloat          Number
+hi link erlangFloat          Number
+hi link erlangFloat          Number
+hi link erlangFloat          Number
+hi link erlangHex            Number
+hi link erlangBIF            Keyword
+hi link erlangFun            Keyword
+hi link erlangList           Delimiter
+hi link erlangTuple          Delimiter
+hi link erlangBinary         Structure
+hi link erlangBitVariable    Identifier
+hi link erlangBitType        Type
+hi link erlangBitSize        Number
 
-" Define new highlight groups {{{1
-hi def link erlangFunHead  ErlangFunHead
 " }}}
+
+" hi def link erlangFunctionHead  ErlangFunHead
 
 let b:current_syntax = "erlang"
 
