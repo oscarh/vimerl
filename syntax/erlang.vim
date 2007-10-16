@@ -24,7 +24,6 @@ endif
 
 " Erlang is case sensitive
 syn case match
-" }}}
 
 " Match groups {{{1
 syn match erlangStringModifier               /\\./ contained
@@ -79,7 +78,7 @@ syn match erlangBitSize                      /:\@<=[0-9]\+/ contained
 syn region erlangBinary                      start=/<</ end=/>>/ contains=erlangBitVariable,erlangBitType,erlangBitSize,erlangBitError,erlangBitDelimiter
 
 " BIFS
-syn match erlangBIF                          /\<\%(abs\|apply\|atom_to_list\|binary_to_list\|binary_to_term\|check_process_code\|concat_binary\|date\|delete_module\|disconnect_node\|element\|erase\|exit\|float\|float_to_list\|garbage_collect\|get\|get_keys\|group_leader\|halt\|hd\|integer_to_list\|iolist_to_binary\|iolist_size\|length\|link\|list_to_atom\|list_to_binary\|list_to_existing_atom\|list_to_float\|list_to_integer\|list_to_pid\|list_to_tuple\|load_module\|make_ref\|monitor_node\|node\|nodes\|now\|open_port\|pid_to_list\|port_close\|port_command\|port_connect\|port_control\|pre_loaded\|process_flag\|process_info\|processes\|purge_module\|put\|register\|registered\|round\|self\|setelement\|size\|spawn\|spawn_link\|spawn_opt\|split_binary\|statistics\|term_to_binary\|throw\|time\|tl\|trunc\|tuple_to_list\|unlink\|unregister\|whereis\)(\@=/
+syn match erlangBIF                          /:\@<!\<\%(abs\|apply\|atom_to_list\|binary_to_list\|binary_to_term\|check_process_code\|concat_binary\|date\|delete_module\|disconnect_node\|element\|erase\|exit\|float\|float_to_list\|garbage_collect\|get\|get_keys\|group_leader\|halt\|hd\|integer_to_list\|iolist_to_binary\|iolist_size\|length\|link\|list_to_atom\|list_to_binary\|list_to_existing_atom\|list_to_float\|list_to_integer\|list_to_pid\|list_to_tuple\|load_module\|make_ref\|monitor_node\|node\|nodes\|now\|open_port\|pid_to_list\|port_close\|port_command\|port_connect\|port_control\|pre_loaded\|process_flag\|process_info\|processes\|purge_module\|put\|register\|registered\|round\|self\|setelement\|size\|spawn\|spawn_link\|spawn_opt\|split_binary\|statistics\|term_to_binary\|throw\|time\|tl\|trunc\|tuple_to_list\|unlink\|unregister\|whereis\)(\@=/
 " }}}
 
 " Link Erlang stuff to Vim groups {{{1
