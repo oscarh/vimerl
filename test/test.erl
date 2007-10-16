@@ -37,7 +37,8 @@ foo([H | List]) when not is_list(List) ->
 		foo    -> exit(normal)
 	end,
 	foo:put(),
-	erlang:foobar(),
+	ferlang:put()
+	erlang:make_tuple(...),
 	erlang:put(),
 	put(),
 	2#23 - 1.34e-2 + 2.23e2 div 1.5,
