@@ -40,11 +40,12 @@ foo([H | List]) when not is_list(List) ->
 	"{\"foobar",
 	Pid ! foo,
 	?aeo,
+	1234 
 	$a,
 	true, 
 	"Yes this is \" true",
 	<<Variable:16, 23:8/binary>>,
-	[$\ , $B, $\B],
+	[$\ , $B, $\B, $%, $", $\"],
 	#foobar{Xyz, baz, Baz},
 	[X || X <- lists:seq(2,5)],
 	case foobar(Ost) of
