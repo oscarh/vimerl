@@ -36,6 +36,10 @@ foo([H | List]) when not is_list(List) ->
 		X or Y -> fun bar/2;
 		foo    -> exit(normal)
 	end,
+	foo:put(),
+	erlang:foobar(),
+	erlang:put(),
+	put(),
 	2#23 - 1.34e-2 + 2.23e2 div 1.5,
 	"{\"foobar",
 	Pid ! foo,
