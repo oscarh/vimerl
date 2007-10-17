@@ -62,7 +62,7 @@ syn match erlangRecord                       /#\w\+/
 syn match erlangTuple                        /{\|}/
 syn match erlangList                         /\[\|\]/
 
-syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|module\|export\|import\)(\@=/
+syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|module\|export\|import\|behaviour\)(\@=/
 syn match erlangInclude                      /^-include\%(_lib\)\?(\@=/
 syn match erlangRecordDef                    /^-record(\@=/
 syn match erlangDefine                       /^-define(\@=/
