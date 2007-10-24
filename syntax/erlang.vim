@@ -29,7 +29,7 @@ syn case match
 syn match erlangStringModifier               /\\./ contained
 syn match erlangModifier                     /\$\\\?./
 
-syn match erlangInteger                      /\<[0-9]\+#[0-9a-f]\+\|[0-9]\+\>/
+syn match erlangInteger                      /\<\%([0-9]\+#[0-9a-f]\+\|[0-9]\+\)\>/
 syn match erlangFloat                        /\<[0-9]\+\.[0-9]\+\%(e-\?[0-9]\+\)\?\>/
 
 syn keyword erlangTodo                       TODO FIXME XXX contained

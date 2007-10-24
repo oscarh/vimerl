@@ -191,4 +191,10 @@ endif " }}}
 
 call s:SetErlangOptions()
 
+" Skeletons {{{1
+function GenServer()
+	echo foo 
+endfunction
+" }}}
+
 " vim: set foldmethod=marker:
