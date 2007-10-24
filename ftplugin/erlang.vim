@@ -51,6 +51,7 @@ function s:SetErlangOptions()
 	endif
 endfunction
 
+
 " Define folding functions {{{1
 if !exists("*GetErlangFold")
 	" Folding params {{{2

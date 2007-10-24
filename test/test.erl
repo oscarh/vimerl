@@ -42,7 +42,7 @@ foo([H | List]) when not is_list(List) ->
 	erlang:put(),
 	put(),
 	2#23 - 1.34e-2 + 2.23e2 div 1.5,
-	"{\"foobar",
+	"{\"foobar~10.5c",
 	Pid ! foo,
 	?aeo,
 	1234 
