@@ -6,10 +6,14 @@
 " ------------------------------------------------------------------------------
 " {{{1
 " Options:
+"
+" Erlang BIFs
+" g:erlangHighlightBif - highlight erlang built in functions (default: off)
+"
 " }}}
 " -----------------------------------------------------------------------------
 
-
+" Setup {{{1
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
 if version < 600
@@ -21,11 +25,12 @@ endif
 " Erlang is case sensitive
 syn case match
 
+" Match groups {{{1
 syn match erlangStringModifier               /\\./ contained
 syn match erlangModifier                     /\$\\\?./
 
-syn match erlangInteger                      /[0-9]\+#[0-9a-f]\+\|[0-9]\+/
-syn match erlangFloat                        /[0-9]\+\.[0-9]\+\%(e-\?[0-9]\+\)\?/
+syn match erlangInteger                      /\<\%([0-9]\+#[0-9a-f]\+\|[0-9]\+\)\>/
+syn match erlangFloat                        /\<[0-9]\+\.[0-9]\+\%(e-\?[0-9]\+\)\?\>/
 
 syn keyword erlangTodo                       TODO FIXME XXX contained
 syn match erlangComment                      /%.*$/ contains=@Spell,erlangTodo
@@ -57,8 +62,9 @@ syn match erlangRecord                       /#\w\+/
 syn match erlangTuple                        /{\|}/
 syn match erlangList                         /\[\|\]/
 
-syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|module\|export\|import\)(\@=/
+syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|module\|export\|import\|behaviour\)(\@=/
 syn match erlangInclude                      /^-include\%(_lib\)\?(\@=/
+syn match erlangRecordDef                    /^-record(\@=/
 syn match erlangDefine                       /^-define(\@=/
 syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|endif\)(\@=/
 
@@ -72,7 +78,10 @@ syn match erlangBitSize                      /:\@<=[0-9]\+/ contained
 syn region erlangBinary                      start=/<</ end=/>>/ contains=erlangBitVariable,erlangBitType,erlangBitSize,erlangBitError,erlangBitDelimiter
 
 " BIFS
-syn match erlangBIF                          /\<\%(abs\|apply\|atom_to_list\|binary_to_list\|binary_to_term\|check_process_code\|concat_binary\|date\|delete_module\|disconnect_node\|element\|erase\|exit\|float\|float_to_list\|garbage_collect\|get\|get_keys\|group_leader\|halt\|hd\|integer_to_list\|iolist_to_binary\|iolist_size\|length\|link\|list_to_atom\|list_to_binary\|list_to_existing_atom\|list_to_float\|list_to_integer\|list_to_pid\|list_to_tuple\|load_module\|make_ref\|monitor_node\|node\|nodes\|now\|open_port\|pid_to_list\|port_close\|port_command\|port_connect\|port_control\|pre_loaded\|process_flag\|process_info\|processes\|purge_module\|put\|register\|registered\|round\|self\|setelement\|size\|spawn\|spawn_link\|spawn_opt\|split_binary\|statistics\|term_to_binary\|throw\|time\|tl\|trunc\|tuple_to_list\|unlink\|unregister\|whereis\)(\@=/
+syn match erlangBIF                          /\%([^:0-9A-Za-z_]\|\<erlang:\)\@<=\%(abs\|apply\|atom_to_list\|binary_to_list\|binary_to_term\|check_process_code\|concat_binary\|date\|delete_module\|disconnect_node\|element\|erase\|exit\|float\|float_to_list\|garbage_collect\|get\|get_keys\|group_leader\|halt\|hd\|integer_to_list\|iolist_to_binary\|iolist_size\|length\|link\|list_to_atom\|list_to_binary\|list_to_existing_atom\|list_to_float\|list_to_integer\|list_to_pid\|list_to_tuple\|load_module\|make_ref\|monitor_node\|node\|nodes\|now\|open_port\|pid_to_list\|port_close\|port_command\|port_connect\|port_control\|pre_loaded\|process_flag\|process_info\|processes\|purge_module\|put\|register\|registered\|round\|self\|setelement\|size\|spawn\|spawn_link\|spawn_opt\|split_binary\|statistics\|term_to_binary\|throw\|time\|tl\|trunc\|tuple_to_list\|unlink\|unregister\|whereis\)(\@=/
+syn match erlangBif                          /\<\%(erlang:\)\@<=\%(append_element\|bump_reductions\|cancel_timer\|demonitor\|display\|error\|fault\|fun_info\|fun_to_list\|function_exported\|get_cookie\|get_stacktrace\|hash\|hibernate\|info\|is_builtin\|loaded\|localtime\|localtime_to_universaltime\|localtime_to_universaltime\|make_tuple\|md5\|md5_init\|md5_update\|memory\|monitor\|monitor_node\|phash\|phash2\|port_call\|port_info\|port_to_list\|ports\|process_display\|raise\|read_timer\|ref_to_list\|resume_process\|send\|send_after\|send_nosuspend\|set_cookie\|spawn_monitor\|start_timer\|suspend_process\|system_flag\|system_info\|system_monitor\|trace\|trace_delivered\|trace_info\|trace_pattern\|universaltime\|universaltime_to_localtime\|yield\)(\@=/
+syn match erlangBif                          /erlang\(:\w\)\@=/
+" }}}
 
 " Link Erlang stuff to Vim groups {{{1
 hi link erlangTodo           Todo
@@ -83,8 +92,8 @@ hi link erlangStringModifier SpecialChar
 hi link erlangComment        Comment
 hi link erlangVariable       Identifier
 hi link erlangInclude        Include
+hi link erlangRecordDef      Keyword
 hi link erlangAttribute      Keyword
-hi link erlangGBIF           Keyword
 hi link erlangKeyword        Keyword
 hi link erlangMacro          Macro
 hi link erlangDefine         Define
@@ -112,10 +121,13 @@ hi link erlangBinary         Structure
 hi link erlangBitVariable    Identifier
 hi link erlangBitType        Type
 hi link erlangBitSize        Number
-
 " }}}
 
-" hi def link erlangFunctionHead  ErlangFunHead
+" Optional linkings {{{1
+if exists("g:erlangHighlightBif") && g:erlangHighlightBif
+	hi link erlangGBIF           Keyword
+endif
+" }}}
 
 let b:current_syntax = "erlang"
 

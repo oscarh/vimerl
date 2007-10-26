@@ -62,15 +62,21 @@ foo([H | List]) when not is_list(List) ->
 		X or Y -> fun bar/2;
 		foo    -> exit(normal)
 	end,
+	foo:put(),
+	ferlang:put()
+	erlang:make_tuple(...),
+	erlang:put(),
+	put(),
 	2#23 - 1.34e-2 + 2.23e2 div 1.5,
 	"{\"foobar",
 	Pid ! foo,
 	?aeo,
+	1234 
 	$a,
 	true, 
 	"Yes this is \" true",
 	<<Variable:16, 23:8/binary>>,
-	[$\ , $B, $\B],
+	[$\ , $B, $\B, $%, $", $\"],
 	#foobar{Xyz, baz, Baz},
 	[X || X <- lists:seq(2,5)],
 	case foobar(Ost) of
