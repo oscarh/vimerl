@@ -11,6 +11,8 @@
 -copyright("foobar").
 -vsn("$Rev: ").
 
+-behaviour(foo).
+
 -define(AO(Aeu), ok).
 -ifdef(AO).
 -endif(AO).
@@ -74,6 +76,8 @@ foo([H | List]) when not is_list(List) ->
 	1234 
 	$a,
 	true, 
+	$A,
+	$\",
 	"Yes this is \" true",
 	<<Variable:16, 23:8/binary>>,
 	[$\ , $B, $\B, $%, $", $\"],
