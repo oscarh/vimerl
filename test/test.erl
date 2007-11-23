@@ -11,6 +11,8 @@
 -copyright("foobar").
 -vsn("$Rev: ").
 
+-behaviour(foo).
+
 -define(AO(Aeu), ok).
 -ifdef(AO).
 -endif(AO).
@@ -20,6 +22,13 @@ start() -> foo(), bar().
 foo(#foo{bar = Bar, test = Test}) ->
 	foo([1,2,3]).
 
+foo(Nay) ->
+	1,
+	2,
+	3;
+bar(Yay) ->
+	hey_this_works.
+
 % aoeunth\aoeunth
 foo([H | List]) when not is_list(List) ->
 	List-List andalso (not X or Y) orelse Bar,
@@ -27,6 +36,25 @@ foo([H | List]) when not is_list(List) ->
 	1 bsl 2,
 	foo:bar(),
 	foo_bar(23), % and me?
+	case foo(23) of
+		bar -> Yay;
+		foo -> case lol(bar) of
+				oe -> OK;
+				noy -> Fjo
+			end
+	end,
+	receive
+		Foo -> ok
+	after
+		2000 -> error
+	end,
+	case catch bar(foo) of
+		aonue -> aoe;
+		aoeu -> if
+				Foo -> Yay;
+				aoue -> ok
+			end
+	end,
 	1 = 2,
 	([1,2] ++ [3,4]) -- [5],
 	1 * 2/23+23-23,
@@ -48,6 +76,8 @@ foo([H | List]) when not is_list(List) ->
 	1234 
 	$a,
 	true, 
+	$A,
+	$\",
 	"Yes this is \" true",
 	<<Variable:16, 23:8/binary>>,
 	[$\ , $B, $\B, $%, $", $\"],
