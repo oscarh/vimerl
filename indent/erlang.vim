@@ -10,6 +10,10 @@ if exists("b:did_indent")
 endif
 let b:did_indent = 1
 
+if exists("*ErlangIndent")
+  finish
+endif
+
 setlocal indentexpr=ErlangIndent()
 setlocal indentkeys+==after,=end,=catch
 
