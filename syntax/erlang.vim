@@ -27,8 +27,8 @@ syn case match
 
 " Match groups {{{1
 syn match erlangStringModifier               /\\./ contained
-syn match erlangStringModifier               /\~\%(-\?[0-9*]\+\.\)\?\%([0-9*]\+\..\?\)\?\%(c\|f\|e\|g\|s\|w\|p\|W\|P\|B\|X\|#\|b\|+\|n\|i\)/
-syn match erlangModifier                     /\?<\$\\\?./
+syn match erlangStringModifier               /\~\%(-\?[0-9*]\+\)\?\%(\.[0-9*]\+\..\?\)\?\%(c\|f\|e\|g\|s\|w\|p\|W\|P\|B\|X\|#\|b\|+\|n\|i\)/
+syn match erlangModifier                     /\$\\\?./
 
 syn match erlangInteger                      /\<\%([0-9]\+#[0-9a-fA-F]\+\|[0-9]\+\)\>/
 syn match erlangFloat                        /\<[0-9]\+\.[0-9]\+\%(e-\?[0-9]\+\)\?\>/
