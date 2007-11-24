@@ -2,7 +2,7 @@
 " Language:	    Erlang
 " Maintainer:	Csaba Hoch <csaba.hoch@gmail.com>
 " Last Change:	2007 Sep 14
-" Version:      1.0
+" Version:      1.2
 
 " Only load this indent file when no other was loaded.
 if exists("b:did_indent")
