@@ -73,7 +73,7 @@ function s:ErlangIndentAtferLine(l)
         elseif a:l[i] =~ "[A-Z_]"
             let m = matchend(a:l,".[[:alnum:]_]*",i)
             let lastReceive = 0
-        elseif a:l[i] == "." && (i+1>=length || a:l[i+1]!~ "[0-9]")
+		elseif a:l[i] == "." && (i+1>=length || a:l[i+1] == "")
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
