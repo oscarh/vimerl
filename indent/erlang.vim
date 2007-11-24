@@ -10,12 +10,13 @@ if exists("b:did_indent")
 endif
 let b:did_indent = 1
 
+setlocal indentexpr=ErlangIndent()
+setlocal indentkeys+==after,=end,=catch
+
+" Only define the functions once
 if exists("*ErlangIndent")
   finish
 endif
-
-setlocal indentexpr=ErlangIndent()
-setlocal indentkeys+==after,=end,=catch
 
 " The function go through the whole line, analyses it and sets the indentation
 " (ind variable).
@@ -73,7 +74,7 @@ function s:ErlangIndentAtferLine(l)
         elseif a:l[i] =~ "[A-Z_]"
             let m = matchend(a:l,".[[:alnum:]_]*",i)
             let lastReceive = 0
-		elseif a:l[i] == "." && (i+1>=length || a:l[i+1] == "")
+        elseif a:l[i] == "." && i+1>=length
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
