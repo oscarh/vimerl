@@ -1,8 +1,8 @@
 " Vim indent file
-" Language:	    Erlang
-" Maintainer:	Csaba Hoch <csaba.hoch@gmail.com>
-" Last Change:	2007 Sep 14
-" Version:      1.2
+" Language:     Erlang
+" Maintainer:   Csaba Hoch <csaba.hoch@gmail.com>
+" Last Change:  2007 Nov 24
+" Version: 1.2
 
 " Only load this indent file when no other was loaded.
 if exists("b:did_indent")
@@ -11,11 +11,11 @@ endif
 let b:did_indent = 1
 
 setlocal indentexpr=ErlangIndent()
-setlocal indentkeys+==after,=end,=catch
+setlocal indentkeys+==after,=end,=catch,=),=],=}
 
-" Only define the functions once
+" Only define the functions once.
 if exists("*ErlangIndent")
-  finish
+   finish
 endif
 
 " The function go through the whole line, analyses it and sets the indentation
@@ -30,6 +30,7 @@ function s:ErlangIndentAtferLine(l)
                 " the indentation of the current line plus one shiftwidth
     let lastFun = 0 " the last token was a 'fun'
     let lastReceive = 0 " the last token was a 'receive'; needed for 'after'
+    let lastHashMark = 0 " the last token was a 'hashmark'
 
     while 0<= i && i < length
 
@@ -74,9 +75,16 @@ function s:ErlangIndentAtferLine(l)
         elseif a:l[i] =~ "[A-Z_]"
             let m = matchend(a:l,".[[:alnum:]_]*",i)
             let lastReceive = 0
-        elseif a:l[i] == "." && i+1>=length
+        elseif a:l[i] == '$'
+            let m = i+2
+            let lastReceive = 0
+        elseif a:l[i] == "." && (i+1>=length || a:l[i+1]!~ "[0-9]")
             let m = i+1
-            let ind = ind - 1
+            if lastHashMark
+                let lastHashMark = 0
+            else
+                let ind = ind - 1
+            end
             let lastReceive = 0
         elseif a:l[i] == '-' && (i+1<length && a:l[i+1]=='>')
             let m = i+2
@@ -86,11 +94,15 @@ function s:ErlangIndentAtferLine(l)
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
+        elseif a:l[i] == '#'
+            let m = i+1
+            let lastHashMark = 1
         elseif a:l[i] =~ '[({[]'
             let m = i+1
             let ind = ind + 1
             let lastFun = 0
             let lastReceive = 0
+            let lastHashMark = 0
         elseif a:l[i] =~ '[)}\]]'
             let m = i+1
             let ind = ind - 1
@@ -108,17 +120,17 @@ function s:ErlangIndentAtferLine(l)
 endfunction
 
 function s:FindPrevNonBlankNonComment(lnum)
-	let lnum = prevnonblank(a:lnum)
-	let line = getline(lnum)
-	" continue to search above if the current line begins with a '%'
-	while line =~ '^\s*%.*$'
-		let lnum = prevnonblank(lnum - 1)
-		if 0 == lnum
-			return 0
-		endif
-		let line = getline(lnum)
-	endwhile
-	return lnum
+    let lnum = prevnonblank(a:lnum)
+    let line = getline(lnum)
+    " continue to search above if the current line begins with a '%'
+    while line =~ '^\s*%.*$'
+        let lnum = prevnonblank(lnum - 1)
+        if 0 == lnum
+            return 0
+        endif
+        let line = getline(lnum)
+    endwhile
+    return lnum
 endfunction
 
 function ErlangIndent()
@@ -171,4 +183,22 @@ function ErlangIndent()
     return ind
 
 endfunction
+
+" TODO:
+" 
+" f() ->
+"     x("foo
+"         bar")
+"         ,
+"         bad_indent.
+"
+" fun
+"     init/0,
+"     bad_indent
+"
+"     #rec
+"     .field,
+" bad_indent
+"
+
 
