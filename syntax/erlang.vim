@@ -56,7 +56,7 @@ syn region erlangString                      start=/"/ end=/"/ skip=/\\/ contain
 
 syn match erlangVariable                     /\<[A-Z_]\w*\>/
 syn match erlangAtom                         /\%(\%(^-\)\|#\)\@<!\<[a-z]\w*\>(\@!/
-syn match erlangAtom                         /\\\@<!'.*\\\@<!'/
+syn match erlangAtom                         /\\\@<!'[^']*\\\@<!'/
 
 syn match erlangRecord                       /#\w\+/
 
