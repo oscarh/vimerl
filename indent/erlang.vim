@@ -1,8 +1,8 @@
 " Vim indent file
 " Language:     Erlang
 " Maintainer:   Csaba Hoch <csaba.hoch@gmail.com>
-" Last Change:  2007 Nov 24
-" Version: 1.2
+" Contributor:  Edwin Fine <efine145_nospam01 at usa dot net>
+" Last Change:  2008 Mar 12
 
 " Only load this indent file when no other was loaded.
 if exists("b:did_indent")
@@ -43,36 +43,36 @@ function s:ErlangIndentAtferLine(l)
         elseif a:l[i] == "'"
             let m = matchend(a:l,"'[^']*'",i)
             let lastReceive = 0
-        elseif a:l[i] =~ "[a-z]"
+        elseif a:l[i] =~# "[a-z]"
             let m = matchend(a:l,".[[:alnum:]_]*",i)
             if lastFun
                 let ind = ind - 1
                 let lastFun = 0
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~ '^\%(case\|if\|try\)$'
+            elseif a:l[(i):(m-1)] =~# '^\%(case\|if\|try\)$'
                 let ind = ind + 1
-            elseif a:l[(i):(m-1)] =~ '^receive$'
+            elseif a:l[(i):(m-1)] =~# '^receive$'
                 let ind = ind + 1
                 let lastReceive = 1
-            elseif a:l[(i):(m-1)] =~ '^begin$'
+            elseif a:l[(i):(m-1)] =~# '^begin$'
                 let ind = ind + 2
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~ '^end$'
+            elseif a:l[(i):(m-1)] =~# '^end$'
                 let ind = ind - 2
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~ '^after$'
+            elseif a:l[(i):(m-1)] =~# '^after$'
                 if lastReceive == 0
                     let ind = ind - 1
                 else
                     let ind = ind + 0
                 end
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~ '^fun$'
+            elseif a:l[(i):(m-1)] =~# '^fun$'
                 let ind = ind + 1
                 let lastFun = 1
                 let lastReceive = 0
             endif
-        elseif a:l[i] =~ "[A-Z_]"
+        elseif a:l[i] =~# "[A-Z_]"
             let m = matchend(a:l,".[[:alnum:]_]*",i)
             let lastReceive = 0
         elseif a:l[i] == '$'
@@ -97,13 +97,13 @@ function s:ErlangIndentAtferLine(l)
         elseif a:l[i] == '#'
             let m = i+1
             let lastHashMark = 1
-        elseif a:l[i] =~ '[({[]'
+        elseif a:l[i] =~# '[({[]'
             let m = i+1
             let ind = ind + 1
             let lastFun = 0
             let lastReceive = 0
             let lastHashMark = 0
-        elseif a:l[i] =~ '[)}\]]'
+        elseif a:l[i] =~# '[)}\]]'
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
@@ -123,7 +123,7 @@ function s:FindPrevNonBlankNonComment(lnum)
     let lnum = prevnonblank(a:lnum)
     let line = getline(lnum)
     " continue to search above if the current line begins with a '%'
-    while line =~ '^\s*%.*$'
+    while line =~# '^\s*%.*$'
         let lnum = prevnonblank(lnum - 1)
         if 0 == lnum
             return 0
@@ -149,31 +149,31 @@ function ErlangIndent()
     let ind = indent(lnum) + &sw * s:ErlangIndentAtferLine(prevline)
 
     " special cases:
-    if prevline =~ '^\s*\%(after\|end\)\>'
+    if prevline =~# '^\s*\%(after\|end\)\>'
         let ind = ind + 2*&sw
     endif
-    if currline =~ '^\s*end\>'
+    if currline =~# '^\s*end\>'
         let ind = ind - 2*&sw
     endif
-    if currline =~ '^\s*after\>'
+    if currline =~# '^\s*after\>'
         let plnum = s:FindPrevNonBlankNonComment(v:lnum-1)
-        if getline(plnum) =~ '^[^%]*\<receive\>\s*\%(%.*\)\=$'
+        if getline(plnum) =~# '^[^%]*\<receive\>\s*\%(%.*\)\=$'
             let ind = ind - 1*&sw
             " If the 'receive' is not in the same line as the 'after'
         else
             let ind = ind - 2*&sw
         endif
     endif
-    if prevline =~ '^\s*[)}\]]'
+    if prevline =~# '^\s*[)}\]]'
         let ind = ind + 1*&sw
     endif
-    if currline =~ '^\s*[)}\]]'
+    if currline =~# '^\s*[)}\]]'
         let ind = ind - 1*&sw
     endif
-    if prevline =~ '^\s*\%(catch\)\s*\%(%\|$\)'
+    if prevline =~# '^\s*\%(catch\)\s*\%(%\|$\)'
         let ind = ind + 1*&sw
     endif
-    if currline =~ '^\s*\%(catch\)\s*\%(%\|$\)'
+    if currline =~# '^\s*\%(catch\)\s*\%(%\|$\)'
         let ind = ind - 1*&sw
     endif
 
@@ -200,5 +200,7 @@ endfunction
 "     .field,
 " bad_indent
 "
-
+" case X of
+"     1 when A; B ->
+"     bad_indent
 
