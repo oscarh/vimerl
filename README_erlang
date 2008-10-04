@@ -4,6 +4,10 @@ The indentation plugin is provided by Csaba Hoch and disttributed with his
 permission.
 
 Installation:
+The tarball root is vim_erlang-REL/. To remove this part of the package
+(e.g., to extract the contents to you .vim dir) use tar --strip-components 1
+-xjf vim_erlang-X.X.tar.bz2
+
 * Unix
 	- For local installation (one user only) extract the tarball to your
 	  ~/.vim directory
