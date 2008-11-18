@@ -37,7 +37,6 @@ let s:doneFunctionDefinitions=1
 " Local settings {{{1
 " Run Erlang make instead of GNU Make
 function s:SetErlangOptions()
-	compiler erlang
 	if version >= 700
 		setlocal omnifunc=erlangcomplete#Complete
 	endif
