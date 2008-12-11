@@ -69,6 +69,8 @@ syn match erlangRecordDef                    /^-record(\@=/
 syn match erlangDefine                       /^-define(\@=/
 syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|endif\)(\@=/
 
+syn match erlangType                         /^-\%(spec\|type\)[( ]\@=/
+
 syn match erlangMacro                        /\%(-define(\)\@<=\w\+/
 syn match erlangMacro                        /?\w\+/
 
@@ -120,6 +122,7 @@ hi link erlangTuple          Delimiter
 hi link erlangBinary         Keyword
 hi link erlangBitVariable    Identifier
 hi link erlangBitType        Type
+hi link erlangType           Type
 hi link erlangBitSize        Number
 " }}}
 
