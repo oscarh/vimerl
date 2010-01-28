@@ -84,7 +84,7 @@ function s:ErlangIndentAfterLine(l)
                 let lastHashMark = 0
             else
                 let ind = ind - 1
-            end
+            endif
             let lastReceive = 0
         elseif a:l[i] == '-' && (i+1<length && a:l[i+1]=='>')
             let m = i+2
