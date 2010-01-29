@@ -21,7 +21,7 @@ endif
 " The function go through the whole line, analyses it and sets the indentation
 " (ind variable).
 " l: the number of the line to be examined.
-function s:ErlangIndentAtferLine(l)
+function s:ErlangIndentAfterLine(l)
     let i = 0 " the index of the current character in the line
     let length = strlen(a:l) " the length of the line
     let ind = 0 " how much should be the difference between the indentation of
@@ -84,7 +84,7 @@ function s:ErlangIndentAtferLine(l)
                 let lastHashMark = 0
             else
                 let ind = ind - 1
-            end
+            endif
             let lastReceive = 0
         elseif a:l[i] == '-' && (i+1<length && a:l[i+1]=='>')
             let m = i+2
@@ -146,7 +146,7 @@ function ErlangIndent()
     let prevline = getline(lnum)
     let currline = getline(v:lnum)
 
-    let ind = indent(lnum) + &sw * s:ErlangIndentAtferLine(prevline)
+    let ind = indent(lnum) + &sw * s:ErlangIndentAfterLine(prevline)
 
     " special cases:
     if prevline =~# '^\s*\%(after\|end\)\>'
