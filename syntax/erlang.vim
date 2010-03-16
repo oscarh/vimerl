@@ -67,7 +67,7 @@ syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compi
 syn match erlangInclude                      /^-include\%(_lib\)\? *(\@=/
 syn match erlangRecordDef                    /^-record *(\@=/
 syn match erlangDefine                       /^-\%(define\|undef\) *(\@=/
-syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|else\|endif\) *(\@=/
+syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|else\|endif\)\%( *(\@=\)\?/
 
 syn match erlangType                         /^-\%(spec\|type\)[( ]\@=/
 
