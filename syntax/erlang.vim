@@ -35,6 +35,8 @@ syn match erlangFloat                        /\<[0-9]\+\.[0-9]\+\%(e-\?[0-9]\+\)
 
 syn keyword erlangTodo                       TODO FIXME XXX contained
 syn match erlangComment                      /%.*$/ contains=@Spell,erlangTodo
+syn match   erlangAnnotation       " \@<=@\%(clear\|docfile\|end\|headerfile\|todo\|TODO\|type\|author\|copyright\|doc\|reference\|see\|since\|title\|version\|deprecated\|hidden\|private\|equiv\|spec\|throws\)" contained
+syn match   erlangAnnotation       "`[^']*'" contained
 
 syn keyword erlangKeyword                    band bor bnot bsl bsr bxor div rem xor
 syn keyword erlangKeyword                    try catch begin receive after cond fun let query
@@ -92,6 +94,7 @@ hi link erlangNoSpellString  String
 hi link erlangModifier       SpecialChar
 hi link erlangStringModifier SpecialChar
 hi link erlangComment        Comment
+hi link erlangAnnotation     Special
 hi link erlangVariable       Identifier
 hi link erlangInclude        Include
 hi link erlangRecordDef      Keyword
@@ -107,7 +110,7 @@ hi link erlangOperator       Operator
 hi link erlangConditional    Conditional
 hi link erlangGuard          Conditional
 hi link erlangBoolean        Boolean
-hi link erlangAtom           Normal
+hi link erlangAtom           Type
 hi link erlangRecord         Structure
 hi link erlangInteger        Number
 hi link erlangFloat          Number
