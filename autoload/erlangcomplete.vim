@@ -9,6 +9,7 @@
 let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
+let s:erlang_completion_path = '~/.vim/autoload/'
 
 " Main function for completion {{{1
 function! erlangcomplete#Complete(findstart, base)
@@ -86,8 +87,8 @@ endfunction
 " vim: foldmethod=marker:
 " Find external function names {{{2
 function s:erlangFindExternalFunc(module, base)
-	let functions = []
-	return functions
+        let functions =  system('cd ' . s:erlang_completion_path . '; erl -noshell -s erlang_completion complete ' . a:module . ' -s init stop')
+	return split(functions, '\n')
 endfunction
 
 " Find local function names {{{2
