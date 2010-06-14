@@ -88,7 +88,14 @@ endfunction
 " Find external function names {{{2
 function s:erlangFindExternalFunc(module, base)
         let functions = system(s:erlang_completion_path . ' ' . a:module)
-	return split(functions, '\n')
+        for element in sort(split(functions, '\n'))
+            if match(element, a:base) == 0
+                let function_name = matchstr(element, a:base . '\w\+')
+                let field = {'word': function_name . '(', 'abbr': element}
+                call complete_add(field)
+            endif
+        endfor
+        return []
 endfunction
 
 " Find local function names {{{2
