@@ -55,7 +55,7 @@ syn keyword erlangOperator                   div rem
 syn region erlangString                      start=/"/ end=/"/ skip=/\\/ contains=@Spell,erlangStringModifier
 
 syn match erlangVariable                     /\<[A-Z_]\w*\>/
-syn match erlangAtom                         /\%(\%(^-\)\|#\)\@<!\<[a-z]\w*\>(\@!/
+syn match erlangAtom                         /\%(\%(^-\)\|#\)\@<!\<[a-z]\w*\>[(:]\@!/
 syn match erlangAtom                         /\\\@<!'[^']*\\\@<!'/
 
 syn match erlangRecord                       /#\w\+/
@@ -108,7 +108,7 @@ hi link erlangOperator       Operator
 hi link erlangConditional    Conditional
 hi link erlangGuard          Conditional
 hi link erlangBoolean        Boolean
-hi link erlangAtom           Normal
+hi link erlangAtom           Constant
 hi link erlangRecord         Structure
 hi link erlangInteger        Number
 hi link erlangFloat          Number
