@@ -10,6 +10,11 @@ let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
 let s:erlang_completion_path = '~/.vim/autoload/erlang_completion.erl'
+let s:erlang_man_path = '/usr/lib/erlang/man'
+
+if !exists('g:erlang_completion_display_doc')
+  let g:erlang_completion_display_doc = 1
+endif
 
 " Main function for completion {{{1
 function! erlangcomplete#Complete(findstart, base)
@@ -91,7 +96,23 @@ function s:erlangFindExternalFunc(module, base)
         for element in sort(split(functions, '\n'))
             if match(element, a:base) == 0
                 let function_name = matchstr(element, a:base . '\w\+')
-                let field = {'word': function_name . '(', 'abbr': element}
+                let number_of_args = matchstr(element, '\d\+', len(function_name))
+                let number_of_comma = max([number_of_args - 1, 0])
+                let file_path = s:erlang_man_path . '/man?/' . a:module . '\.?'
+                " [:-2] cutting some weird characters at the end
+                " becouse grep doesn't support multilines, we have to filter
+                " first by .B and next by looking via function name
+                " if someone have better idea, please change it
+                let description = ''
+                if g:erlang_completion_display_doc != 0
+                    let system_command = 'grep -A 1 "\.B" ' . file_path . ' | grep -EZo "\<' . function_name . '\>\((\w+, ){' . number_of_comma . '}[^),]*\) -> .*"'
+                    let description = system(system_command)
+                    let description = description[:-2]
+                endif
+                if description == ''
+                    let description = element " if function doesn't have description egz. lists:rmerge, put rmerge/2 instead
+                endif
+                let field = {'word': function_name . '(', 'abbr': description, 'kind': 'f', 'dup': 1} " always duplicate functions
                 call complete_add(field)
             endif
         endfor
