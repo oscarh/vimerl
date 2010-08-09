@@ -79,12 +79,14 @@ function s:ErlangIndentAfterLine(l)
             let m = i+2
             let lastReceive = 0
         elseif a:l[i] == "." && (i+1>=length || a:l[i+1]!~ "[0-9]")
-            let m = i+1
-            if lastHashMark
-                let lastHashMark = 0
-            else
-                let ind = ind - 1
+            if matchend(a:l, '[^({<[]*[)}>\]]', i) == -1
+                if lastHashMark
+                    let lastHashMark = 0
+                else
+                    let ind = ind - 1
+                endif
             endif
+            let m = i+1
             let lastReceive = 0
         elseif a:l[i] == '-' && (i+1<length && a:l[i+1]=='>')
             let m = i+2
@@ -97,16 +99,6 @@ function s:ErlangIndentAfterLine(l)
         elseif a:l[i] == '#'
             let m = i+1
             let lastHashMark = 1
-        elseif a:l[i] =~# '[({[]'
-            let m = i+1
-            let ind = ind + 1
-            let lastFun = 0
-            let lastReceive = 0
-            let lastHashMark = 0
-        elseif a:l[i] =~# '[)}\]]'
-            let m = i+1
-            let ind = ind - 1
-            let lastReceive = 0
         else
             let m = i+1
         endif
@@ -133,6 +125,63 @@ function s:FindPrevNonBlankNonComment(lnum)
     return lnum
 endfunction
 
+" Galculate the lowest distance between two parent ranges
+function s:ErlangInnermostParenSorter(p1, p2)
+    let diff = a:p2[0] - a:p1[0]
+    return diff == 0 ? a:p2[1] - a:p1[1] : diff
+endfunction
+
+" Find the next parens to curline and curcol and get the best math by sorter
+function s:ErlangSearchParens(curline, curcol, sorter)
+    let parens = [['(', ')'],
+                \ ['\[', '\]'],
+                \ ['{', '}'],
+                \ ['<<', '>>']]
+
+    let skip = "synIDattr(synID(line('.'), col('.'), 1), 'name')"
+                \ ." =~? '\\(modifier\\|comment\\|string\\)$'"
+
+
+    let plist = []
+
+    " search all paren types
+    for [lpar, rpar] in parens
+        call cursor(a:curline, a:curcol)
+        let result = searchpair(lpar, '', rpar, 'bW', skip)
+        let plist += [[result, col('.')]]
+    endfor
+
+    " get and return best match
+    call sort(plist, a:sorter)
+    return plist[0]
+endfunction
+
+" Find the innermost starting parens/braces/brackets/funnels and calculate the
+" indentation level according to their position.
+function s:ErlangHandleParens(curline, curcol)
+    let [line, column] = s:ErlangSearchParens(a:curline, a:curcol, "s:ErlangInnermostParenSorter")
+
+    if line > 0
+        let matchdata = getline(line)
+        let linedata = getline(a:curline)
+
+        " first closing par in current line
+        let clpar = match(linedata, '^\s*\%([)}\]]\|>>\)') != -1
+
+        if match(matchdata, '\%([({[]\|<<\)\s*$', column - 1) != -1
+            " block data
+            let ind = indent(line) + (clpar ? 0 : &sw)
+        else
+            " inline data
+            let ind = column - (clpar ? 1 : 0)
+        endif
+
+        return ind >= 0 ? ind : -1
+    endif
+
+    return -1
+endfunction
+
 function ErlangIndent()
 
     " Find a non-blank line above the current line.
@@ -146,7 +195,29 @@ function ErlangIndent()
     let prevline = getline(lnum)
     let currline = getline(v:lnum)
 
-    let ind = indent(lnum) + &sw * s:ErlangIndentAfterLine(prevline)
+    let newind = s:ErlangHandleParens(v:lnum, 1)
+    if newind >= 0
+        return newind
+    endif
+
+    let soup = prevline
+
+    let ind = indent(lnum)
+
+    if prevline =~# '\([)}\]]\|>>\)'
+        " Last line contains an end paren, so indent at the same level as
+        " the statement introducing the paren.
+        let pllastparen = match(prevline, '\([)}\]]\|>>\)[^)}>\]]*$')
+        let [pl, pc] = s:ErlangSearchParens(lnum, pllastparen, "s:ErlangInnermostParenSorter")
+        if pl > 0 && pl != lnum
+            let ind = indent(pl)
+            " Let's put all that soup together so we can later find
+            " the right keywords and indent according to them.
+            let soup = join(getline(pl, lnum), ' ')
+        endif
+    endif
+
+    let ind = ind + &sw * s:ErlangIndentAfterLine(soup)
 
     " special cases:
     if prevline =~# '^\s*\%(after\|end\)\>'
@@ -163,12 +234,6 @@ function ErlangIndent()
         else
             let ind = ind - 2*&sw
         endif
-    endif
-    if prevline =~# '^\s*[)}\]]'
-        let ind = ind + 1*&sw
-    endif
-    if currline =~# '^\s*[)}\]]'
-        let ind = ind - 1*&sw
     endif
     if prevline =~# '^\s*\%(catch\)\s*\%(%\|$\)'
         let ind = ind + 1*&sw
