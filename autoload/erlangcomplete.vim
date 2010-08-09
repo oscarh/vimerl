@@ -9,8 +9,8 @@
 let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
-let s:erlang_completion_path = '~/.vim/autoload/erlang_completion.erl'
-let s:erlang_man_path = '/usr/lib/erlang/man'
+let s:erlangCompletionPath = '~/.vim/autoload/erlang_completion.erl'
+let g:erlangManPath = '/usr/lib/erlang/man'
 
 if !exists('g:erlang_completion_display_doc')
   let g:erlang_completion_display_doc = 1
@@ -92,13 +92,13 @@ endfunction
 " vim: foldmethod=marker:
 " Find external function names {{{2
 function s:erlangFindExternalFunc(module, base)
-        let functions = system(s:erlang_completion_path . ' ' . a:module)
+        let functions = system(s:erlangCompletionPath . ' ' . a:module)
         for element in sort(split(functions, '\n'))
             if match(element, a:base) == 0
                 let function_name = matchstr(element, a:base . '\w\+')
                 let number_of_args = matchstr(element, '\d\+', len(function_name))
                 let number_of_comma = max([number_of_args - 1, 0])
-                let file_path = s:erlang_man_path . '/man?/' . a:module . '\.?'
+                let file_path = s:erlangManPath . '/man?/' . a:module . '\.?'
                 " [:-2] cutting some weird characters at the end
                 " becouse grep doesn't support multilines, we have to filter
                 " first by .B and next by looking via function name

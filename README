@@ -35,3 +35,9 @@ The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 	g:erlangFold
 * Splitting functions if a new function head appears: (default: 0)
 	g:erlangFoldSplitFunction
+
+Completion options:
+The options expect a string with the path.
+
+* Set the location of the Erlang man pages: (default: '/usr/lib/erlang/man')
+	g:erlangManPath
