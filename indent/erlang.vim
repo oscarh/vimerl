@@ -65,7 +65,7 @@ function s:ErlangIndentAfterLine(l)
                     let ind = ind - 1
                 else
                     let ind = ind + 0
-                end
+                endif
                 let lastReceive = 0
             elseif a:l[(i):(m-1)] =~# '^fun$'
                 let ind = ind + 1
