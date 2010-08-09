@@ -10,7 +10,10 @@ let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
 let s:erlangCompletionPath = '~/.vim/autoload/erlang_completion.erl'
-let g:erlangManPath = '/usr/lib/erlang/man'
+
+if !exists(g:erlangManPath)
+	let g:erlangManPath = '/usr/lib/erlang/man'
+endif
 
 if !exists('g:erlang_completion_display_doc')
   let g:erlang_completion_display_doc = 1
