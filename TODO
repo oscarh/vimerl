@@ -1,5 +1,3 @@
   * Code skeletons for modules
   * Fix folding
     * I don't actually know what's not working or what's working but a note says it needs to be fixed.
-  * Omni completion
-    * Completion of local functions is implemented

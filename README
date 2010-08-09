@@ -31,7 +31,7 @@ The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 Folding options:
 The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 
-* Enable/disable folding: (default: 1)
+* Enable/disable folding: (default: 0)
 	g:erlangFold
 * Splitting functions if a new function head appears: (default: 0)
 	g:erlangFoldSplitFunction

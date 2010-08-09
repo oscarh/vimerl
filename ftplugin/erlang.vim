@@ -2,13 +2,12 @@
 " Language:   Erlang
 " Maintainer: Oscar Hellström <oscar@oscarh.net>
 " URL:        http://personal.oscarh.net
-" Version:    2006-06-23
+" Version:    2010-08-09
 " ------------------------------------------------------------------------------
 " Usage: {{{1
 "
-" To disable folding put
-" let g:erlangFold=0
-" in your vimrc
+" To enable folding put in your vimrc
+" let g:erlangFold=1
 "
 " Folding will make only one fold for a complete function, even though it has
 " more than one function head and body
@@ -42,7 +41,7 @@ function s:SetErlangOptions()
 	endif
 
 	" {{{2 Settings for folding
-	if (!exists("g:erlangFold")) || g:erlangFold
+	if (exists("g:erlangFold")) && g:erlangFold
 		setlocal foldmethod=expr
 		setlocal foldexpr=GetErlangFold(v:lnum)
 		setlocal foldtext=ErlangFoldText()
@@ -125,7 +124,7 @@ if !exists("*GetErlangFold")
 		if line=~ s:ErlangBeginHead
 			while line !~ s:ErlangEndHead
 				if 0 == lnum " EOF / BOF
-					retun '='
+					return '='
 				endif
 				if line =~ s:ErlangFunEnd
 					return '='
