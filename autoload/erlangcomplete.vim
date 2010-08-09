@@ -98,7 +98,7 @@ function s:erlangFindExternalFunc(module, base)
                 let function_name = matchstr(element, a:base . '\w\+')
                 let number_of_args = matchstr(element, '\d\+', len(function_name))
                 let number_of_comma = max([number_of_args - 1, 0])
-                let file_path = s:erlangManPath . '/man?/' . a:module . '\.?'
+                let file_path = g:erlangManPath . '/man?/' . a:module . '\.?'
                 " [:-2] cutting some weird characters at the end
                 " becouse grep doesn't support multilines, we have to filter
                 " first by .B and next by looking via function name
