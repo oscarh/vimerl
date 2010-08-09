@@ -1,4 +1,4 @@
-Vim Erlang plugin
+== Vim Erlang plugin ==
 
 The indentation plugin is provided by Csaba Hoch and disttributed with his
 permission.
@@ -37,7 +37,9 @@ The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 	g:erlangFoldSplitFunction
 
 Completion options:
-The options expect a string with the path.
+The options expect a string with the path or an integer value like before.
 
-* Set the location of the Erlang man pages: (default: '/usr/lib/erlang/man')
+* Set the location of the Erlang man pages: (default: "/usr/lib/erlang/man")
 	g:erlangManPath
+* Enable/disable using Erlang man pages in the code completion: (default: 1)
+	g:erlangCompletionDisplayDoc

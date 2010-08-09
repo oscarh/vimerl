@@ -11,12 +11,12 @@ let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
 let s:erlangCompletionPath = '~/.vim/autoload/erlang_completion.erl'
 
-if !exists(g:erlangManPath)
+if !exists('g:erlangManPath')
 	let g:erlangManPath = '/usr/lib/erlang/man'
 endif
 
-if !exists('g:erlang_completion_display_doc')
-  let g:erlang_completion_display_doc = 1
+if !exists('g:erlangCompletionDisplayDoc')
+  let g:erlangCompletionDisplayDoc = 1
 endif
 
 " Main function for completion {{{1
@@ -107,7 +107,7 @@ function s:erlangFindExternalFunc(module, base)
                 " first by .B and next by looking via function name
                 " if someone have better idea, please change it
                 let description = ''
-                if g:erlang_completion_display_doc != 0
+                if g:erlangCompletionDisplayDoc != 0
                     let system_command = 'grep -A 1 "\.B" ' . file_path . ' | grep -EZo "\<' . function_name . '\>\((\w+, ){' . number_of_comma . '}[^),]*\) -> .*"'
                     let description = system(system_command)
                     let description = description[:-2]
