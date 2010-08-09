@@ -1,4 +1,4 @@
-== Vim Erlang plugin ==
+=== Vim Erlang plugin ===
 
 The indentation plugin is provided by Csaba Hoch and disttributed with his
 permission.
@@ -18,7 +18,9 @@ The tarball root is vim_erlang-REL/. To remove this part of the package
 	- For local installation (one user only) extract the tarball to your
 	  directory
 
-Settings:
+
+== Settings ==
+
 You can set various variables in your vimrc file to make the plugin behave
 differently.
 
@@ -43,3 +45,23 @@ The options expect a string with the path or an integer value like before.
 	g:erlangManPath
 * Enable/disable using Erlang man pages in the code completion: (default: 1)
 	g:erlangCompletionDisplayDoc
+
+More completion options:
+The options expect a string as below is explained.
+
+* Set the `grep' command to be use when scanning the man pages: (default: "grep")
+	g:erlangCompletionGrep
+* Set the suffix of the man page names: (default: "")
+	g:erlangManSuffix
+
+	- On Ubuntu, Erlang man pages are placed like this:
+		/ERLANG/PATH/man/man3/lists.3erl.gz
+
+		** So, you must set:
+			let g:erlangCompletionGrep='zgrep'
+			let g:erlangManSuffix='erl\.gz'
+
+	- In another systems, Erlang man pages are placed like this:
+		/ERLANG/PATH/man/man3/lists.3
+
+		** In this case, use the default options value **

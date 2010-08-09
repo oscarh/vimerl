@@ -9,7 +9,15 @@
 let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
-let s:erlangCompletionPath = '~/.vim/autoload/erlang_completion.erl'
+let s:erlangCompletionPath  = '~/.vim/autoload/erlang_completion.erl'
+
+if !exists('g:erlangCompletionGrep')
+	g:erlangCompletionGrep = 'grep'
+endif
+
+if !exists('g:erlangManSuffix')
+	g:erlangManSuffix = ''
+endif
 
 if !exists('g:erlangManPath')
 	let g:erlangManPath = '/usr/lib/erlang/man'
@@ -101,14 +109,14 @@ function s:erlangFindExternalFunc(module, base)
                 let function_name = matchstr(element, a:base . '\w\+')
                 let number_of_args = matchstr(element, '\d\+', len(function_name))
                 let number_of_comma = max([number_of_args - 1, 0])
-                let file_path = g:erlangManPath . '/man?/' . a:module . '\.?'
+                let file_path = g:erlangManPath . '/man?/' . a:module . '\.?' . g:erlangManSuffix
                 " [:-2] cutting some weird characters at the end
                 " becouse grep doesn't support multilines, we have to filter
                 " first by .B and next by looking via function name
                 " if someone have better idea, please change it
                 let description = ''
                 if g:erlangCompletionDisplayDoc != 0
-                    let system_command = 'grep -A 1 "\.B" ' . file_path . ' | grep -EZo "\<' . function_name . '\>\((\w+, ){' . number_of_comma . '}[^),]*\) -> .*"'
+                    let system_command = g:erlangCompletionGrep . ' -A 1 "\.B" ' . file_path . ' | grep -EZo "\<' . function_name . '\>\((\w+, ){' . number_of_comma . '}[^),]*\) -> .*"'
                     let description = system(system_command)
                     let description = description[:-2]
                 endif
