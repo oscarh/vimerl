@@ -2,7 +2,9 @@
 " Vim omni-completion script
 " Author: Oscar Hellström
 " Email: oscar@oscarh.net
-" Version: 2006-06-23
+" Version: 2010-08-10
+" Contributors: kTT (http://github.com/kTT)
+" 		Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 " ------------------------------------------------------------------------------
 
 " Patterns for completions {{{1
@@ -24,7 +26,7 @@ if !exists('g:erlangManPath')
 endif
 
 if !exists('g:erlangCompletionDisplayDoc')
-  let g:erlangCompletionDisplayDoc = 1
+	let g:erlangCompletionDisplayDoc = 1
 endif
 
 " Main function for completion {{{1
@@ -110,13 +112,18 @@ function s:erlangFindExternalFunc(module, base)
                 let number_of_args = matchstr(element, '\d\+', len(function_name))
                 let number_of_comma = max([number_of_args - 1, 0])
                 let file_path = g:erlangManPath . '/man?/' . a:module . '\.?' . g:erlangManSuffix
+
+		" TODO: try to compile local files first
+
                 " [:-2] cutting some weird characters at the end
                 " becouse grep doesn't support multilines, we have to filter
                 " first by .B and next by looking via function name
                 " if someone have better idea, please change it
                 let description = ''
-                if g:erlangCompletionDisplayDoc != 0
-                    let system_command = g:erlangCompletionGrep . ' -A 1 "\.B" ' . file_path . ' | grep -EZo "\<' . function_name . '\>\((\w+, ){' . number_of_comma . '}[^),]*\) -> .*"'
+                " Don't look man pages if the module is present in the current directory
+                if g:erlangCompletionDisplayDoc != 0 && !filereadable(a:module . '.erl')
+                    let system_command = g:erlangCompletionGrep . ' -A 1 "\.B" ' . file_path . ' | grep -EZo "\<' .
+\                           function_name . '\>\((\w+, ){' . number_of_comma . '}[^),]*\) -> .*"'
                     let description = system(system_command)
                     let description = description[:-2]
                 endif

@@ -1,22 +1,32 @@
 === Vim Erlang plugin ===
 
-The indentation plugin is provided by Csaba Hoch and disttributed with his
-permission.
+Vim plugin for the programming language Erlang. The next features
+are implemented:
+	- Syntax highlight
+	- Code folding
+	- Code completion (based on Mod:module_info/0 to use the
+			   Erlang introspection mechanism)
+	- Auto-indent
+	- QuickFix
 
-Installation:
-The tarball root is vim_erlang-REL/. To remove this part of the package
-(e.g., to extract the contents to you .vim dir) use tar --strip-components 1
--xjf vim_erlang-X.X.tar.bz2
+
+== Installation ==
 
 * Unix
-	- For local installation (one user only) extract the tarball to your
-	  ~/.vim directory
-	- For global installation extract the tarball to your vim runtime
-	  directory (e.g. /usr/share/vim/vimX/)
+	- For local installation (one user only) copy the content of the
+	  tarball to your ~/.vim directory
+	- For global installation copy the content of the tarball to
+	  your vim runtime directory (e.g. /usr/share/vim/vimX/)
 
-* Win
-	- For local installation (one user only) extract the tarball to your
-	  directory
+
+== Omni completion ==
+
+Write the name of a module (e.g. `my_mod:') presh CTRL-X CTRL-O to activate
+the omni completion. The omni completion try to use the man pages to give
+the definition for the standard functions.
+
+The program `escript' is required, the standard Erlang installation
+comes with it.
 
 
 == Settings ==
