@@ -23,7 +23,8 @@ are implemented:
 
 Write the name of a module (e.g. `my_mod:') presh CTRL-X CTRL-O to activate
 the omni completion. The omni completion try to use the man pages to give
-the definition for the standard functions.
+the definition for the standard functions. The omni completion try to compile
+local modules, if it is possible, in order to call their Mod:module_info/0.
 
 The program `escript' is required, the standard Erlang installation
 comes with it.

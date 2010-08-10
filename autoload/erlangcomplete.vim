@@ -105,6 +105,11 @@ endfunction
 " vim: foldmethod=marker:
 " Find external function names {{{2
 function s:erlangFindExternalFunc(module, base)
+        " If it's a local module, try to compile it
+        if filereadable(a:module . '.erl')
+            silent! execute '!erlc' a:module . '.erl'
+            redraw!
+        endif
         let functions = system(s:erlangCompletionPath . ' ' . a:module)
         for element in sort(split(functions, '\n'))
             if match(element, a:base) == 0
@@ -112,9 +117,6 @@ function s:erlangFindExternalFunc(module, base)
                 let number_of_args = matchstr(element, '\d\+', len(function_name))
                 let number_of_comma = max([number_of_args - 1, 0])
                 let file_path = g:erlangManPath . '/man?/' . a:module . '\.?' . g:erlangManSuffix
-
-		" TODO: try to compile local files first
-
                 " [:-2] cutting some weird characters at the end
                 " becouse grep doesn't support multilines, we have to filter
                 " first by .B and next by looking via function name
