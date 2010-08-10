@@ -14,11 +14,11 @@ let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
 let s:erlangCompletionPath  = '~/.vim/autoload/erlang_completion.erl'
 
 if !exists('g:erlangCompletionGrep')
-	g:erlangCompletionGrep = 'grep'
+	let g:erlangCompletionGrep = 'grep'
 endif
 
 if !exists('g:erlangManSuffix')
-	g:erlangManSuffix = ''
+	let g:erlangManSuffix = ''
 endif
 
 if !exists('g:erlangManPath')
@@ -128,7 +128,7 @@ function s:erlangFindExternalFunc(module, base)
                     let description = description[:-2]
                 endif
                 if description == ''
-                    let description = element " if function doesn't have description egz. lists:rmerge, put rmerge/2 instead
+                    let description = element " if function doesn't have description e.g. lists:rmerge, put rmerge/2 instead
                 endif
                 let field = {'word': function_name . '(', 'abbr': description, 'kind': 'f', 'dup': 1} " always duplicate functions
                 call complete_add(field)
