@@ -106,8 +106,8 @@ endfunction
 " Find external function names {{{2
 function s:erlangFindExternalFunc(module, base)
         " If it's a local module, try to compile it
-        if filereadable(a:module . '.erl')
-            silent! execute '!erlc' a:module . '.erl'
+        if filereadable(a:module . '.erl') && !filereadable(a:module . '.beam')
+            silent execute '!erlc' a:module . '.erl' '>/dev/null' '2>/dev/null'
             redraw!
         endif
         let functions = system(s:erlangCompletionPath . ' ' . a:module)
