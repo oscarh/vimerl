@@ -64,11 +64,10 @@ syn match erlangTuple                        /{\|}/
 syn match erlangList                         /\[\|\]/
 
 syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|deprecated\|module\|export\|import\|behaviour\) *(\@=/
-syn match erlangInclude                      /^-include\%(_lib\)\? *(\@=/
-syn match erlangRecordDef                    /^-record *(\@=/
-syn match erlangDefine                       /^-define *(\@=/
-syn match erlangPreCondit                    /^-\%(undef\|ifdef\|ifndef\) *(\@=/
-syn match erlangPreCondit                    /^-\%(else\|endif\)\.\@=/
+syn match erlangInclude                      /^-include\%(_lib\)\?\s*(\@=/
+syn match erlangRecordDef                    /^-record\s*(\@=/
+syn match erlangDefine                       /^-\%(define\|undef\)\s*(\@=/
+syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|else\|endif\)\%(\s*(\@=\)\?/
 
 syn match erlangType                         /^-\%(spec\|type\)[( ]\@=/
 

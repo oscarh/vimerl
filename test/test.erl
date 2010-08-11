@@ -17,6 +17,12 @@
 -ifdef(AO).
 -endif(AO).
 
+-ifndef(FOO).
+-define(FOO, true).
+-else.
+-define(FOO, false).
+-endif.
+
 start() -> foo(), bar().
 
 foo(#foo{bar = Bar, test = Test}) ->
