@@ -196,4 +196,147 @@ function GenServer()
 endfunction
 " }}}
 
+let g:erlangServerName = "vimerl"
+let g:erlangHost = g:erlangServerName . '@' . matchstr(system('hostname -f'), "\\w*.\\w*")
+let g:erlangCookie = 'ADASDKSDAKJDSKA'
+let g:erlangClientName = "vimerl_client"
+let g:pathToWranglerBin = "/tmp/wrangler-0.8.9/pkg/share/wrangler/ebin/"
+
+function! StartServer()
+    let command = "echo 'wrangler_app:start([], []).' | erl -noshell -pa " . g:pathToWranglerBin . " -name " . g:erlangServerName . " -setcookie ". g:erlangCookie . "&"
+    call system(command)
+    call SendStartSignal()
+endfunction
+
+function! SendStartSignal()
+    call s:send_rpc('wrangler_preview_server', 'start_preview_server', '[]')
+endfunction
+
+function! s:send_rpc(module, fun, args)
+    let command = "echo 'rpc:call(" . g:erlangHost . ", " . a:module . ", " . a:fun . ", " . a:args . ").' | erl -setcookie " . g:erlangCookie . " -name " . g:erlangClientName
+    return system(command)
+endfunction
+
+function! s:check_for_error(result)
+    let error_start =  match(a:result, '{error,"')
+    if error_start != -1
+        echo matchstr(a:result, '[^"]*', error_start + strlen('{error,"'))
+        return 1
+    endif
+    return 0
+endfunction
+
+function! s:send_confirm()
+    let module = 'wrangler_preview_server'
+    let fun = 'commit'
+    let args = '[]'
+    let result = s:send_rpc(module, fun, args)
+endfunction
+
+function! s:call_extract(start_line, start_col, end_line, end_col, name)
+    let file = expand("%:p")
+    let module = 'refac_new_fun'
+    let fun = 'fun_extraction'
+    let args = '["' . file . '", {' . a:start_line . ', ' . a:start_col . '}, {' . a:end_line . ', ' . a:end_col . '}, "' . a:name . '", ' . &sw . ']'
+    let result = s:send_rpc(module, fun, args)
+    if s:check_for_error(result)
+        return 0
+    endif
+    call s:send_confirm()
+    return 1
+endfunction
+
+function! ErlangExtractFunction(mode) range
+    silent w!
+    let name = inputdialog("New function name: ")
+    if name != ""
+        if a:mode == "v"
+            let start_pos = getpos("'<")
+            let start_line = start_pos[1]
+            let start_col = start_pos[2]
+
+            let end_pos = getpos("'>")
+            let end_line = end_pos[1]
+            let end_col = end_pos[2]
+            if s:call_extract(start_line, start_col, end_line, end_col, name)
+                :e
+            endif
+        elseif a:mode == "n"
+            let pos = getpos(".")
+            let line = pos[1]
+            let col = pos[2]
+            if s:call_extract(line, col, line, col, name)
+                :e
+            endif
+        else
+            echo "Mode not supported."
+        endif
+    else
+        echo "Empty function name. Ignoring."
+    endif
+endfunction
+nmap <A-r>e :call ErlangExtractFunction("n")<ENTER>
+vmap <A-r>e :call ErlangExtractFunction("v")<ENTER>
+
+function! s:call_rename(mode, line, col, name, search_path)
+    let file = expand("%:p")
+    let module = 'refac_rename_' . a:mode
+    let fun = 'rename_' . a:mode
+    let args = '["' . file .'", '
+    if a:mode != "mod"
+         let args = args . a:line . ', ' . a:col . ', '
+    endif
+    let args = args . '"' . a:name . '", ["' . a:search_path . '"], ' . &sw . ']'
+    let result = s:send_rpc(module, fun, args)
+    if s:check_for_error(result)
+        return 0
+    endif
+    call s:send_confirm()
+    return 1
+endfunction
+
+function! ErlangRename(mode)
+    silent w!
+    if a:mode == "mod"
+        let name = inputdialog('Rename module to: ')
+    else
+        let name = inputdialog('Rename "' . expand("<cword>") . '" to: ')
+    endif
+    if name != ""
+        let search_path = inputdialog('Search path: ', expand("%:p:h"))
+        if search_path != ""
+            let pos = getpos(".")
+            let line = pos[1]
+            let col = pos[2]
+            if s:call_rename(a:mode, line, col, name, search_path)
+                :e
+            endif
+        else
+            echo "You must specify search dir"
+        endif
+    else
+        echo "Empty name. Ignoring."
+    endif
+endfunction
+
+function! ErlangRenameFunction()
+    call ErlangRename("fun")
+endfunction
+map <A-r>f :call ErlangRenameFunction()<ENTER>
+
+function! ErlangRenameVariable()
+    call ErlangRename("var")
+endfunction
+map <A-r>v :call ErlangRenameVariable()<ENTER>
+
+function! ErlangRenameModule()
+    call ErlangRename("mod")
+endfunction
+map <A-r>m :call ErlangRenameModule()<ENTER>
+
+function! ErlangRenameProcess()
+    call ErlangRename("process")
+endfunction
+map <A-r>p :call ErlangRenameProcess()<ENTER>
+
 " vim: set foldmethod=marker:
