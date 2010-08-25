@@ -197,23 +197,24 @@ endfunction
 " }}}
 
 let g:erlangServerName = "vimerl"
-let g:erlangHost = g:erlangServerName . '@' . matchstr(system('hostname -f'), "\\w*.\\w*")
-let g:erlangCookie = 'ADASDKSDAKJDSKA'
-let g:erlangClientName = "vimerl_client"
 let g:pathToWranglerBin = "/tmp/wrangler-0.8.9/pkg/share/wrangler/ebin/"
 
 function! StartServer()
-    let command = "echo 'wrangler_app:start([], []).' | erl -noshell -pa " . g:pathToWranglerBin . " -name " . g:erlangServerName . " -setcookie ". g:erlangCookie . "&"
+    let command = "erl -detached -pa " . g:pathToWranglerBin . " -sname " . g:erlangServerName
     call system(command)
     call SendStartSignal()
 endfunction
 
 function! SendStartSignal()
-    call s:send_rpc('wrangler_preview_server', 'start_preview_server', '[]')
+    echo s:send_rpc('application', 'start', '[wrangler_app]')
+endfunction
+
+function! SendStopSignal()
+    echo s:send_rpc('erlang', 'halt', '')
 endfunction
 
 function! s:send_rpc(module, fun, args)
-    let command = "echo 'rpc:call(" . g:erlangHost . ", " . a:module . ", " . a:fun . ", " . a:args . ").' | erl -setcookie " . g:erlangCookie . " -name " . g:erlangClientName
+    let command = "erl_call -sname " . g:erlangServerName . " -a '" . a:module . " " . a:fun . " " . a:args . "'"
     return system(command)
 endfunction
 
@@ -231,6 +232,10 @@ function! s:send_confirm()
     let fun = 'commit'
     let args = '[]'
     let result = s:send_rpc(module, fun, args)
+endfunction
+
+function! SendConfirm()
+    call s:send_confirm()
 endfunction
 
 function! s:call_extract(start_line, start_col, end_line, end_col, name)
@@ -288,6 +293,7 @@ function! s:call_rename(mode, line, col, name, search_path)
     endif
     let args = args . '"' . a:name . '", ["' . a:search_path . '"], ' . &sw . ']'
     let result = s:send_rpc(module, fun, args)
+    echo result
     if s:check_for_error(result)
         return 0
     endif
@@ -308,8 +314,18 @@ function! ErlangRename(mode)
             let pos = getpos(".")
             let line = pos[1]
             let col = pos[2]
+            let current_filename = expand("%")
+            let current_filepath = expand("%:p")
+            let new_filename = name . '.erl'
             if s:call_rename(a:mode, line, col, name, search_path)
-                :e
+                if a:mode == "mod"
+                    execute ':bd ' . current_filename
+                    execute ':e ' . new_filename
+                    silent execute '!mv ' . current_filepath . ' ' . current_filepath . '.bak'
+                    redraw!
+                else
+                    :e
+                endif
             endif
         else
             echo "You must specify search dir"
@@ -338,5 +354,46 @@ function! ErlangRenameProcess()
     call ErlangRename("process")
 endfunction
 map <A-r>p :call ErlangRenameProcess()<ENTER>
+
+function! s:call_tuple_fun_args(start_line, start_col, end_line, end_col, search_path)
+    let file = expand("%:p")
+    let module = 'refac_tuple'
+    let fun = 'tuple_funpar'
+    let args = '["' . file . '", {' . a:start_line . ', ' . a:start_col . '}, {' . a:end_line . ', ' . a:end_col . '}, ["' . a:search_path . '"], ' . &sw . ']'
+    let result = s:send_rpc(module, fun, args)
+    if s:check_for_error(result)
+        return 0
+    endif
+    call s:send_confirm()
+    return 1
+endfunction
+
+function! ErlangTupleFunArgs(mode)
+    silent w!
+    let search_path = inputdialog('Search path: ', expand("%:p:h"))
+    if a:mode == "v"
+        let start_pos = getpos("'<")
+        let start_line = start_pos[1]
+        let start_col = start_pos[2]
+
+        let end_pos = getpos("'>")
+        let end_line = end_pos[1]
+        let end_col = end_pos[2]
+        if s:call_tuple_fun_args(start_line, start_col, end_line, end_col, search_path)
+            :e
+        endif
+    elseif a:mode == "n"
+        let pos = getpos(".")
+        let line = pos[1]
+        let col = pos[2]
+        if s:call_tuple_fun_args(line, col, line, col, search_path)
+            :e
+        endif
+    else
+        echo "Mode not supported."
+    endif
+endfunction
+nmap <A-r>t :call ErlangTupleFunArgs("n")<ENTER>
+vmap <A-r>t :call ErlangTupleFunArgs("v")<ENTER>
 
 " vim: set foldmethod=marker:
