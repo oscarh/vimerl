@@ -1,8 +1,7 @@
-" Vim ftplugin file
+" Erlang refactor file
 " Language:   Erlang
 " Maintainer: Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
 " URL:        http://ktototaki.info
-" Version:    2010-08-26
 
 if exists("b:did_ftplugin_erlang")
     finish
@@ -13,11 +12,6 @@ let b:did_ftplugin_erlang=1
 
 if !exists('g:WranglerHome')
     let g:WranglerHome = '/usr/share/wrangler/'
-endif
-
-" Check for wrangler
-if !exists("g:WranglerHome")
-    finish
 endif
 
 if glob(g:WranglerHome) == ""

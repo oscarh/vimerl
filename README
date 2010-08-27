@@ -21,13 +21,32 @@ are implemented:
 
 == Omni completion ==
 
-Write the name of a module (e.g. `my_mod:') presh CTRL-X CTRL-O to activate
+Write the name of a module (e.g. `my_mod:') press CTRL-X CTRL-O to activate
 the omni completion. The omni completion try to use the man pages to give
 the definition for the standard functions. The omni completion try to compile
 local modules, if it is possible, in order to call their Mod:module_info/0.
 
 The program `escript' is required, the standard Erlang installation
 comes with it.
+
+
+== Refactoring ==
+
+Extract to new function:
+    Select the part of code you want to extract (or point something that
+    can be extracted) and press <Alt-r>e. You will be prompted to put the name
+    of new function. After that you can Preview, Confirm or Cancel this
+    refactoring. (Note: Preview is not currently supported).
+
+Rename variable/function/module:
+    Point on variable/function that name should be changed and press:
+        <Alt-r>f for function
+        <Alt-r>v for variable
+    rename. To rename module, press <Alt-r>m anywere in the buffer.
+
+Tuple function arguments:
+    Select or point on function arguments that should be changed into one tuple and press
+    <Alt-r>t.
 
 
 == Settings ==
@@ -76,3 +95,17 @@ The options expect a string as below is explained.
 		/ERLANG/PATH/man/man3/lists.3
 
 		** In this case, use the default options value **
+
+Compiler options:
+The options  is explained.
+
+* Set the location of the Erlang check_file script: (default: "~/.vim/compiler/check_file.erl")
+        g:erlangCheckFile
+* Enable/disable highlighting erlang errors: (default 1)
+        g:erlangHighlightErrors
+
+Refactoring options:
+The options  is explained.
+
+* Set the location of the Wrangler: (default: /usr/share/wrangler/)
+        g:WranglerHome
