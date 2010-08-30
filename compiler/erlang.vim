@@ -38,7 +38,9 @@ function! HighlightErlangErrors()
         let b:error_list[error.lnum] = item
         call matchadd('SpellBad', "\\%" . error.lnum . "l")
     endfor
-    redraw!
+    if len(getqflist())
+        redraw!
+    endif
     call s:show_msg()
     setlocal makeprg=erlc\ %
 endfunction

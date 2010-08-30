@@ -10,6 +10,10 @@ endif
 " Don't load any other
 let b:did_ftplugin_erlang=1
 
+if !exists('g:erlangRefactoring') || g:erlangRefactoring == 0
+    finish
+endif
+
 if !exists('g:WranglerHome')
     let g:WranglerHome = '/usr/share/wrangler/'
 endif
@@ -93,6 +97,10 @@ function! s:send_confirm()
         let args = '[]'
         return s:send_rpc(module, fun, args)
     else
+        let module = 'wrangler_preview_server'
+        let fun = 'abort'
+        let args = '[]'
+        return s:send_rpc(module, fun, args)
         echo "Canceled"
     endif
 endfunction
@@ -105,7 +113,7 @@ endfunction
 " Format and send function extracton call
 function! s:call_extract(start_line, start_col, end_line, end_col, name)
     let file = expand("%:p")
-    let module = 'refac_new_fun'
+    let module = 'wrangler'
     let fun = 'fun_extraction'
     let args = '["' . file . '", {' . a:start_line . ', ' . a:start_col . '}, {' . a:end_line . ', ' . a:end_col . '}, "' . a:name . '", ' . &sw . ']'
     let result = s:send_rpc(module, fun, args)
@@ -158,7 +166,7 @@ vmap <A-r>e :call ErlangExtractFunction("v")<ENTER>
 
 function! s:call_rename(mode, line, col, name, search_path)
     let file = expand("%:p")
-    let module = 'refac_rename_' . a:mode
+    let module = 'wrangler'
     let fun = 'rename_' . a:mode
     let args = '["' . file .'", '
     if a:mode != "mod"
@@ -168,7 +176,7 @@ function! s:call_rename(mode, line, col, name, search_path)
     let result = s:send_rpc(module, fun, args)
     let [error_code, msg] = s:check_for_error(result)
     if error_code != 0
-        confirm(msg)
+        call confirm(msg)
         return 0
     endif
     echo "This files will be changed: " . matchstr(msg, "[^]]*", 1)
@@ -234,7 +242,7 @@ map <A-r>p :call ErlangRenameProcess()<ENTER>
 
 function! s:call_tuple_fun_args(start_line, start_col, end_line, end_col, search_path)
     let file = expand("%:p")
-    let module = 'refac_tuple'
+    let module = 'wrangler'
     let fun = 'tuple_funpar'
     let args = '["' . file . '", {' . a:start_line . ', ' . a:start_col . '}, {' . a:end_line . ', ' . a:end_col . '}, ["' . a:search_path . '"], ' . &sw . ']'
     let result = s:send_rpc(module, fun, args)

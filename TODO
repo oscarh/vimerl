@@ -8,6 +8,3 @@
 		foo when foo == foo; foo != bur ->
 			...
 			...
-* Fix omni completion, fails when omni completion is used twice on the same line with two different modules.
-  autoload/erlangcomplete.vim needs fixing because fails to get the target token to be used as the module to
-  be completed.

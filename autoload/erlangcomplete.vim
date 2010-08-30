@@ -67,7 +67,7 @@ function! erlangcomplete#Complete(findstart, base)
 		if a:findstart
 			return delimiter
 		else
-			let module = matchstr(line, '\(\<\)\@<=[0-9A-Za-z_-]\+:\@=')
+                        let module = matchstr(line[:-2], '\<\k*\>$')
 			return s:erlangFindExternalFunc(module, a:base)
 		endif
 	endif
