@@ -3,8 +3,3 @@
 	+ I don't actually know what's not working or what's working but a note says it needs to be fixed
 	+ Folding one-line functions fails, i.e.:
 		fun(Args) -> body.
-* Fix indent a pattern followed by a guard with `;' because it fails, i.e.:
-	receive
-		foo when foo == foo; foo != bur ->
-			...
-			...

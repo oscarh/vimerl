@@ -90,7 +90,7 @@ function s:ErlangIndentAfterLine(l)
             let m = i+2
             let ind = ind + 1
             let lastReceive = 0
-        elseif a:l[i] == ';'
+        elseif a:l[i] == ';' && a:l[(i):(length)] !~# '.*->.*'
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
@@ -199,8 +199,3 @@ endfunction
 "     #rec
 "     .field,
 " bad_indent
-"
-" case X of
-"     1 when A; B ->
-"     bad_indent
-
