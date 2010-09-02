@@ -68,8 +68,18 @@ if !exists("*GetErlangFold")
 		while line =~ s:ErlangBlankLine && 0 != lnum
 			let lnum = nextnonblank(lnum + 1)
 			let line = getline(lnum)
-	   endwhile
-	   return lnum
+		endwhile
+		return lnum
+	endfunction
+
+	function s:GetPrevNonBlank(lnum)
+		let lnum = prevnonblank(a:lnum - 1)
+		let line = getline(lnum)
+		while line =~ s:ErlangBlankLine && 0 != lnum
+			let lnum = prevnonblank(lnum - 1)
+			let line = getline(lnum)
+		endwhile
+		return lnum
 	endfunction
 
 	function s:GetFunName(str)
@@ -130,7 +140,6 @@ if !exists("*GetErlangFold")
 				if line =~ s:ErlangFunEnd
 					return '='
 				endif
-				endif
 				let lnum = s:GetNextNonBlank(lnum)
 				let line = getline(lnum)
 			endwhile 
@@ -141,7 +150,7 @@ if !exists("*GetErlangFold")
 					return '='
 				endif
 			endif
-			return '1>'
+			return '>1'
 		endif
 
 		" End of function (only on . not ;) gives fold level 0 {{{3
