@@ -64,16 +64,6 @@ if !exists("*GetErlangFold")
 		return lnum
 	endfunction
 
-	function s:GetPrevNonBlank(lnum)
-		let lnum = prevnonblank(a:lnum - 1)
-		let line = getline(lnum)
-		while line =~ s:ErlangBlankLine && 0 != lnum
-			let lnum = prevnonblank(lnum - 1)
-			let line = getline(lnum)
-		endwhile
-		return lnum
-	endfunction
-
 	function s:GetFunName(str)
 		return matchstr(a:str, '^\a\w*(\@=')
 	endfunction
