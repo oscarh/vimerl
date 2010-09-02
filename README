@@ -105,6 +105,9 @@ The options expect a string with the path and an integer value like before.
 * Enable/disable highlighting erlang errors: (default 1)
         g:erlangHighlightErrors
 
+	- This option makes try to compile the current file each time it is saved
+	  highlighting the errors.
+
 Refactoring options:
 The option expect a string with the path.
 
