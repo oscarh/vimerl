@@ -56,9 +56,14 @@ if !exists("*GetErlangFold")
 	" Folding params {{{2
 	" FIXME: Could these be shared between scripts?
 	let s:ErlangFunEnd      = '^[^%]*\.\s*\(%.*\)\?$'
-	let s:ErlangFunHead     = '^\a\w*(.*)\(\s+when\s+.*\)\?\s\+->\s*$'
+	let s:ErlangFunHead     = '^\a\w*(.*)\(\s\+when\s\+.*\)\?\s\+->.*$'
+
+	"let s:ErlangFunOneLine  = '^\a\w*(.*)\(\s\+when\s\+.*\)\?\s\+->[^%\.]\+\..*$' Sobra
+
 	let s:ErlangBeginHead   = '^\a\w*(.*$'
-	let s:ErlangEndHead     = '^\s\+[a-zA-Z-_{}\[\], ]\+)\(\s+when\s+.*\)\?\s\+->\s\(%.*\)\?*$'
+	let s:ErlangEndHead     = '^\s\+[a-zA-Z-_{}\[\], ]\+)\(\s\+when\s\+.*\)\?\s\+->\s\(%.*\)\?*$' " Malo, pero cuela
+	"let s:ErlangEndHead     = '^\s\+[a-zA-Z-_{}\[\], ]\+)\(\s\+when\s\+.*\)\?\s\+->.*$' El que deberia funcionar
+	"let s:ErlangEndHead     = '^\s\+[a-zA-Z-_{}\[\], ]\+)\(\s+when\s+.*\)\?\s\+->\s\(%.*\)\?*$' Original
 	let s:ErlangBlankLine   = '^\s*\(%.*\)\?$'
 
 	" Auxiliary fold functions {{{2 
@@ -142,7 +147,7 @@ if !exists("*GetErlangFold")
 				endif
 				let lnum = s:GetNextNonBlank(lnum)
 				let line = getline(lnum)
-			endwhile 
+			endwhile
 			" check if prev line was really end of function
 			let lnum = s:GetPrevNonBlank(a:lnum)
 			if exists("g:erlangFoldSplitFunction") && g:erlangFoldSplitFunction
