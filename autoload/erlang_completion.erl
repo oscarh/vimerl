@@ -3,9 +3,8 @@
 
 main([ModuleName]) ->
     Module = erlang:list_to_atom(ModuleName),
-    try Module:module_info() of
-        ModuleInfo ->
-            {exports, Functions} = lists:keyfind(exports, 1, ModuleInfo),
+    try Module:module_info(exports) of
+        Functions ->
             lists:foreach(
                 fun({FunctionName, ArgumentsCount}) ->
                         io:format("~s/~B~n", [FunctionName, ArgumentsCount])
