@@ -1,23 +1,23 @@
 " Vim ftplugin file
-" Language:   Erlang
-" Maintainer: Oscar Hellström <oscar@oscarh.net>
-" URL:        http://personal.oscarh.net
-" Version:    2010-08-09
+" Language:    Erlang
+" Maintainer:  Oscar Hellström <oscar@oscarh.net>
+" URL:         http://personal.oscarh.net
+" Contributor: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+" Version:     2010-09-02
 " ------------------------------------------------------------------------------
-" Usage: {{{1
+" Usage:
 "
 " To enable folding put in your vimrc
 " let g:erlangFold=1
 "
 " Folding will make only one fold for a complete function, even though it has
 " more than one function head and body
-" To change this behaviour put
-" let g:erlangFoldSplitFunction=1
-" in your vimrc file
 "
-" }}}
+" To change this behaviour put in your vimrc file
+" let g:erlangFoldSplitFunction=1
+"
 " ------------------------------------------------------------------------------
-" Plugin init {{{1
+" Plugin init
 if exists("b:did_ftplugin")
 	finish
 endif
@@ -31,42 +31,29 @@ if exists('s:doneFunctionDefinitions')
 endif
 
 let s:doneFunctionDefinitions=1
-" }}}
 
-" Local settings {{{1
-" Run Erlang make instead of GNU Make
+" Local settings
 function s:SetErlangOptions()
         compiler erlang
 	if version >= 700
 		setlocal omnifunc=erlangcomplete#Complete
 	endif
 
-	" {{{2 Settings for folding
 	if (exists("g:erlangFold")) && g:erlangFold
 		setlocal foldmethod=expr
 		setlocal foldexpr=GetErlangFold(v:lnum)
 		setlocal foldtext=ErlangFoldText()
-		"setlocal fml=2
 	endif
 endfunction
 
-
-" Define folding functions {{{1
+" Define folding functions
 if !exists("*GetErlangFold")
-	" Folding params {{{2
-	" FIXME: Could these be shared between scripts?
+	" Folding params
+	let s:ErlangFunBegin    = '^\a\w*(.*$'
 	let s:ErlangFunEnd      = '^[^%]*\.\s*\(%.*\)\?$'
-	let s:ErlangFunHead     = '^\a\w*(.*)\(\s\+when\s\+.*\)\?\s\+->.*$'
-
-	"let s:ErlangFunOneLine  = '^\a\w*(.*)\(\s\+when\s\+.*\)\?\s\+->[^%\.]\+\..*$' Sobra
-
-	let s:ErlangBeginHead   = '^\a\w*(.*$'
-	let s:ErlangEndHead     = '^\s\+[a-zA-Z-_{}\[\], ]\+)\(\s\+when\s\+.*\)\?\s\+->\s\(%.*\)\?*$' " Malo, pero cuela
-	"let s:ErlangEndHead     = '^\s\+[a-zA-Z-_{}\[\], ]\+)\(\s\+when\s\+.*\)\?\s\+->.*$' El que deberia funcionar
-	"let s:ErlangEndHead     = '^\s\+[a-zA-Z-_{}\[\], ]\+)\(\s+when\s+.*\)\?\s\+->\s\(%.*\)\?*$' Original
 	let s:ErlangBlankLine   = '^\s*\(%.*\)\?$'
 
-	" Auxiliary fold functions {{{2 
+	" Auxiliary fold functions
 	function s:GetNextNonBlank(lnum)
 		let lnum = nextnonblank(a:lnum + 1)
 		let line = getline(lnum)
@@ -131,61 +118,31 @@ if !exists("*GetErlangFold")
 		return ac
 	endfunction
 
-	" Main fold function {{{2
+	" Main fold function
 	function GetErlangFold(lnum)
 		let lnum = a:lnum
 		let line = getline(lnum)
 
-		" Function head gives fold level 1 {{{3
-		if line=~ s:ErlangBeginHead
-			while line !~ s:ErlangEndHead
-				if 0 == lnum " EOF / BOF
-					return '='
-				endif
-				if line =~ s:ErlangFunEnd
-					return '='
-				endif
-				let lnum = s:GetNextNonBlank(lnum)
-				let line = getline(lnum)
-			endwhile
-			" check if prev line was really end of function
-			let lnum = s:GetPrevNonBlank(a:lnum)
-			if exists("g:erlangFoldSplitFunction") && g:erlangFoldSplitFunction
-				if getline(lnum) !~ s:ErlangFunEnd
-					return '='
-				endif
-			endif
-			return '>1'
-		endif
-
-		" End of function (only on . not ;) gives fold level 0 {{{3
 		if line =~ s:ErlangFunEnd
 			return '<1'
 		endif
 
-		" Check if line below is a new function head {{{3
-		" Only used if we want to split folds for different function heads
-		" Ignores blank lines
-		if exists("g:erlangFoldSplitFunction") && g:erlangFoldSplitFunction
-			let lnum = s:GetNextNonBlank(lnum)
-
-			if 0 == lnum " EOF
-				return '<1'
-			endif
-
-			let line = getline(lnum)
-
-			" End of prev function head (new function here), ending fold level 1
-			if line =~ s:ErlangFunHead || line =~ s:ErlangBeginHead
-				return '<1'
+		if line =~ s:ErlangFunBegin && foldlevel(lnum) == 1
+			if exists("g:erlangFoldSplitFunction") && g:erlangFoldSplitFunction
+				return '>1'
+			else
+				return '1'
 			endif
 		endif
-		
-		" Otherwise use fold from previous line
+
+		if line =~ s:ErlangFunBegin
+			return '>1'
+		endif
+
 		return '='
 	endfunction
 
-	" Erlang fold description (foldtext function) {{{2
+	" Erlang fold description (foldtext function)
 	function ErlangFoldText()
 		let foldlen = v:foldend - v:foldstart
 		if 1 < foldlen
@@ -200,15 +157,7 @@ if !exists("*GetErlangFold")
 		let retval = v:folddashes . " " . name . "/" . argcount
 		let retval .= " (" . foldlen . " " . lines . ")"
 		return retval
-	endfunction " }}}
-endif " }}}
+	endfunction
+endif
 
 call s:SetErlangOptions()
-
-" Skeletons {{{1
-function GenServer()
-	echo foo 
-endfunction
-" }}}
-
-" vim: set foldmethod=marker:

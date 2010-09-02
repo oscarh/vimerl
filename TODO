@@ -1,5 +1,1 @@
-* Code skeletons for modules
-* Fix folding
-	+ I don't actually know what's not working or what's working but a note says it needs to be fixed
-	+ Folding one-line functions fails, i.e.:
-		fun(Args) -> body.
+* Code skeletons for modules and behaviour.
