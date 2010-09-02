@@ -117,7 +117,7 @@ if !exists("*GetErlangFold")
 			return '<1'
 		endif
 
-		if line =~ s:ErlangFunBegin && foldlevel(lnum) == 1
+		if line =~ s:ErlangFunBegin && foldlevel(lnum - 1) == 1
 			if exists("g:erlangFoldSplitFunction") && g:erlangFoldSplitFunction
 				return '>1'
 			else
