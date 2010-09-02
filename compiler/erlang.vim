@@ -13,7 +13,7 @@ if exists(":CompilerSet") != 2
 endif
 
 if !exists('g:erlangCheckFile')
-    let g:erlangCheckFile = "~/.vim/compiler/check_file.erl"
+    let g:erlangCheckFile = "~/.vim/compiler/erlang_check_file.erl"
 endif
 
 if !exists('g:erlangHighlightErrors')
