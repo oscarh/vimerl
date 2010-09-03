@@ -3,17 +3,17 @@
 " Maintainer:  Oscar Hellström <oscar@oscarh.net>
 " URL:         http://personal.oscarh.net
 " Contributor: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
-" Version:     2010-09-02
+" Version:     2010-09-03
 " ------------------------------------------------------------------------------
 " Usage:
 "
-" To enable folding put in your vimrc
-" let g:erlangFold=1
+" To enable folding put in your vimrc:
+" set foldenable
 "
 " Folding will make only one fold for a complete function, even though it has
-" more than one function head and body
+" more than one function head and body.
 "
-" To change this behaviour put in your vimrc file
+" To change this behaviour put in your vimrc file:
 " let g:erlangFoldSplitFunction=1
 "
 " ------------------------------------------------------------------------------
@@ -34,16 +34,14 @@ let s:doneFunctionDefinitions=1
 
 " Local settings
 function s:SetErlangOptions()
-        compiler erlang
+	compiler erlang
 	if version >= 700
 		setlocal omnifunc=erlangcomplete#Complete
 	endif
 
-	if (exists("g:erlangFold")) && g:erlangFold
-		setlocal foldmethod=expr
-		setlocal foldexpr=GetErlangFold(v:lnum)
-		setlocal foldtext=ErlangFoldText()
-	endif
+	setlocal foldmethod=expr
+	setlocal foldexpr=GetErlangFold(v:lnum)
+	setlocal foldtext=ErlangFoldText()
 endfunction
 
 " Define folding functions
