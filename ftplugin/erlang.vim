@@ -142,7 +142,7 @@ if !exists("*GetErlangFold")
 		let name = s:GetFunName(line)
 		let arguments = s:GetFunArgs(strpart(line, strlen(name)), v:foldstart)
 		let argcount = s:CountFunArgs(arguments)
-		let retval = v:folddashes . " " . name . "/" . argcount
+		let retval = "+" . v:folddashes . " " . name . "/" . argcount
 		let retval .= " (" . foldlen . " " . lines . ")"
 		return retval
 	endfunction
