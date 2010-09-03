@@ -31,6 +31,11 @@ The program `escript' is required, the standard Erlang installation
 comes with it.
 
 
+== Folding ==
+
+To enable it just add to your vimrc `set foldenable'.
+
+
 == Refactoring ==
 
 Extract to new function:
@@ -62,10 +67,8 @@ The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 	g:erlangHighlightBif 
 
 Folding options:
-The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
+The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 
-* Enable/disable folding: (default: 0)
-	g:erlangFold
 * Splitting functions if a new function head appears: (default: 0)
 	g:erlangFoldSplitFunction
 
@@ -100,7 +103,7 @@ The options expect a string as below is explained.
 Compiler options:
 The options expect a string with the path and an integer value like before.
 
-* Set the location of the erlang_check_file.erl script: (default: "~/.vim/compiler/erlang_check_file.erl")
+* Set the location of the `erlang_check_file.erl' script: (default: "~/.vim/compiler/erlang_check_file.erl")
         g:erlangCheckFile
 * Enable/disable highlighting erlang errors: (default 1)
         g:erlangHighlightErrors
@@ -109,7 +112,7 @@ The options expect a string with the path and an integer value like before.
 	  highlighting the errors.
 
 Refactoring options:
-The option expect a string with the path.
+The option expects a string with the path.
 
 * Set the location of the Wrangler tool: (default: "/usr/share/wrangler/")
-        g:WranglerHome
+        g:erlangWranglerPath
