@@ -14,11 +14,11 @@ if !exists('g:erlangRefactoring') || g:erlangRefactoring == 0
     finish
 endif
 
-if !exists('g:WranglerHome')
-    let g:WranglerHome = '/usr/share/wrangler/'
+if !exists('g:erlangWranglerPath')
+    let g:erlangWranglerPath = '/usr/share/wrangler/'
 endif
 
-if glob(g:WranglerHome) == ""
+if glob(g:erlangWranglerPath) == ""
     call confirm("Wrong path to wrangler dir")
     finish
 endif
@@ -29,7 +29,7 @@ let s:erlangServerName = "wrangler_vim"
 
 " Starting background erlang session with wrangler on
 function! StartWranglerServer()
-    let wranglerEbinDir = g:WranglerHome . "/ebin"
+    let wranglerEbinDir = g:erlangWranglerPath . "/ebin"
     let command = "erl_call -s -sname " . s:erlangServerName . " -x 'erl -pa " . wranglerEbinDir . "'"
     call system(command)
     call s:send_rpc('application', 'start', '[wrangler_app]')
