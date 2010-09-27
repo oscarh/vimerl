@@ -36,6 +36,7 @@ function s:ErlangIndentAfterLine(l)
     " ignore type annotation lines
     if a:l =~# '^\s*-type'
 	return 0
+    endif
 
     while 0<= i && i < length
 
