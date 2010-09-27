@@ -32,6 +32,10 @@ function s:ErlangIndentAfterLine(l)
     let lastReceive = 0 " the last token was a 'receive'; needed for 'after'
     let lastHashMark = 0 " the last token was a 'hashmark'
 
+    " ignore type annotation lines
+    if a:l =~# '^\s*-type'
+	return 0
+
     while 0<= i && i < length
 
         " m: the next value of the i
