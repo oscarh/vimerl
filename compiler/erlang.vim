@@ -73,6 +73,7 @@ CompilerSet errorformat=%f:%l:\ %tarning:\ %m,%E%f:%l:\ %m
 
 if g:erlangHighlightErrors
     autocmd BufLeave *.erl call s:clear_matches()
+    autocmd BufEnter *.erl call s:clear_matches()
     autocmd BufWritePost *.erl call HighlightErlangErrors()
     autocmd CursorHold *.erl call s:show_msg()
     autocmd CursorMoved *.erl call s:show_msg()
