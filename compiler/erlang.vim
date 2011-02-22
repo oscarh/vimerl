@@ -42,7 +42,7 @@ function! HighlightErlangErrors()
         redraw!
     endif
     call s:show_msg()
-    setlocal makeprg=erlc\ %
+    setlocal makeprg=make
 endfunction
 
 function! s:show_msg()
@@ -68,7 +68,7 @@ function! s:clear_matches()
     endif
 endfunction
 
-CompilerSet makeprg=erlc\ %
+CompilerSet makeprg=make
 CompilerSet errorformat=%f:%l:\ %tarning:\ %m,%E%f:%l:\ %m
 
 if g:erlangHighlightErrors
