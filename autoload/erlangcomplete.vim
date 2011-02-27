@@ -12,8 +12,8 @@ let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
 
-if !exists('g:erlangCompletionFile')
-    let g:erlangCompletionFile  = '~/.vim/autoload/erlang_completion.erl'
+if !exists('g:erlangCompleteFile')
+    let g:erlangCompleteFile  = '~/.vim/autoload/erlang_complete.erl'
 endif
 
 if !exists('g:erlangCompletionGrep')
@@ -113,7 +113,7 @@ function s:erlangFindExternalFunc(module, base)
             silent execute '!erlc' a:module . '.erl' '>/dev/null' '2>/dev/null'
             redraw!
         endif
-        let functions = system(g:erlangCompletionFile . ' ' . a:module)
+        let functions = system(g:erlangCompleteFile . ' ' . a:module)
         for element in sort(split(functions, '\n'))
             if match(element, a:base) == 0
                 let function_name = matchstr(element, a:base . '\w\+')
@@ -161,4 +161,3 @@ function s:erlangFindLocalFunc(base)
 	endwhile
 	return []
 endfunction
-
