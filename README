@@ -83,6 +83,8 @@ The options expect a string with the path and an integer value like before.
 More completion options:
 The options expect a string as below is explained.
 
+* Set the location of the `erlang_completion.erl' script: (default: "~/.vim/autoload/erlang_completion.erl")
+    g:erlangCompletionFile
 * Set the `grep' command to be use when scanning the man pages: (default: "grep")
 	g:erlangCompletionGrep
 * Set the suffix of the man page names: (default: "")
