@@ -9,7 +9,7 @@ are implemented:
 	- Auto-indent
 	- QuickFix
 	- Wrangler support (the refactoring Erlang tool)
-	- Works well with pathogen (http://www.vim.org/scripts/script.php?script_id=2332)
+	- Works well with Pathogen (http://www.vim.org/scripts/script.php?script_id=2332)
 
 
 == Installation ==
