@@ -16,6 +16,9 @@
 " To change this behaviour put in your vimrc file:
 " let g:erlangFoldSplitFunction=1
 "
+" To change the program for the K command put in your vimrc:
+" let g:erlangKCommand='man'
+"
 " ------------------------------------------------------------------------------
 " Plugin init
 if exists("b:did_ftplugin")
@@ -24,6 +27,10 @@ endif
 
 " Don't load any other
 let b:did_ftplugin=1
+
+if !exists('g:erlangKCommand')
+    let g:erlangKCommand='erl -man'
+endif
 
 if exists('s:doneFunctionDefinitions')
 	call s:SetErlangOptions()
@@ -38,6 +45,9 @@ function s:SetErlangOptions()
 	if version >= 700
 		setlocal omnifunc=erlangcomplete#Complete
 	endif
+    if g:erlangKCommand != ''
+        let &l:keywordprg=g:erlangKCommand
+    endif
 
 	setlocal foldmethod=expr
 	setlocal foldexpr=GetErlangFold(v:lnum)
