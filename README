@@ -82,12 +82,12 @@ The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 * Splitting functions if a new function head appears: (default: 0)
 	g:erlangFoldSplitFunction
 
--- Man pages:
-The option expects a string with the program for the K command or an empty
+-- Consulting man pages:
+The option expects a string with the program for the `K' command or an empty
 string to use the global default.
 
-* Set the program for the K command: (default: "erl -man")
-    g:erlangKCommand='man'
+* Set the program for the `K' command: (default: "erl -man")
+	g:erlangKCommand
 
 -- Completion options:
 The options expect a string with the path and an integer value like before.
