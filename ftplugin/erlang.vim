@@ -50,6 +50,9 @@ function s:SetErlangOptions()
 	setlocal foldexpr=GetErlangFold(v:lnum)
 	setlocal foldtext=ErlangFoldText()
 	let &l:keywordprg=g:erlangKCommand
+	setlocal comments-=:%
+	setlocal comments+=:%%%,:%%,:%
+	setlocal formatoptions+=ro
 endfunction
 
 " Define folding functions
