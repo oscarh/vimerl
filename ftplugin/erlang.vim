@@ -1,9 +1,9 @@
 " Vim ftplugin file
-" Language:    Erlang
-" Maintainer:  Oscar Hellström <oscar@oscarh.net>
-" URL:         http://personal.oscarh.net
-" Contributor: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
-" Version:     2010-09-03
+" Language:     Erlang
+" Author:       Oscar Hellström <oscar@oscarh.net>
+" Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+"               Eduardo Lopez (http://github.com/tapichu)
+" Version:      2011/03/10
 " ------------------------------------------------------------------------------
 " Usage:
 "
@@ -49,10 +49,12 @@ function s:SetErlangOptions()
 	setlocal foldmethod=expr
 	setlocal foldexpr=GetErlangFold(v:lnum)
 	setlocal foldtext=ErlangFoldText()
-	let &l:keywordprg=g:erlangKCommand
-	setlocal comments-=:%
-	setlocal comments+=:%%%,:%%,:%
+
+	setlocal comments=:%%%,:%%,:%
+	setlocal commentstring=%%s
 	setlocal formatoptions+=ro
+
+	let &l:keywordprg=g:erlangKCommand
 endfunction
 
 " Define folding functions
