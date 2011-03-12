@@ -4,22 +4,7 @@
 " Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 "               Eduardo Lopez (http://github.com/tapichu)
 " Version:      2011/03/10
-" ------------------------------------------------------------------------------
-" Usage:
-"
-" To enable folding put in your vimrc:
-" set foldenable
-"
-" Folding will make only one fold for a complete function, even though it has
-" more than one function head and body.
-"
-" To change this behaviour put in your vimrc file:
-" let g:erlangFoldSplitFunction=1
-"
-" To use the default program for the `K' command put in your vimrc:
-" let g:erlangKCommand='man'
-"
-" ------------------------------------------------------------------------------
+
 " Plugin init
 if exists("b:did_ftplugin")
 	finish
@@ -54,7 +39,9 @@ function s:SetErlangOptions()
 	setlocal commentstring=%%s
 	setlocal formatoptions+=ro
 
-	let &l:keywordprg=g:erlangKCommand
+	if g:erlangKCommand != ''
+		let &l:keywordprg=g:erlangKCommand
+	endif
 endfunction
 
 " Define folding functions

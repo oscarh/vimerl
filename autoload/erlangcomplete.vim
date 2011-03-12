@@ -1,13 +1,11 @@
-" ------------------------------------------------------------------------------
-" Vim omni-completion script
-" Author: Oscar Hellström
-" Email: oscar@oscarh.net
-" Version: 2010-08-10
+" Vim omni completion file
+" Language:     Erlang
+" Author:       Oscar Hellström <oscar@oscarh.net>
+" Version:      2010-08-10
 " Contributors: kTT (http://github.com/kTT)
-" 		Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
-" ------------------------------------------------------------------------------
+"               Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 
-" Patterns for completions {{{1
+" Patterns for completions
 let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
@@ -32,21 +30,21 @@ if !exists('g:erlangCompletionDisplayDoc')
 	let g:erlangCompletionDisplayDoc = 1
 endif
 
-" Main function for completion {{{1
+" Main function for completion
 function! erlangcomplete#Complete(findstart, base)
-	" 0) Init {{{2
+	" 0) Init
 	let lnum = line('.')
 	let column = col('.') 
 	let line = strpart(getline('.'), 0, column - 1)
 
-	" 1) First, check if completion is impossible {{{2
+	" 1) First, check if completion is impossible
 	if line =~ '[^~\\]%'
 		return -1
 	endif
 
 	"echo "line[col - 1]:" . line[column - 1] . " line[col - 2]:" . line[column - 2] .  "\n" . line . "\n"
 
-	" 2) Check if the char to the left of us are part of a function call {{{2
+	" 2) Check if the char to the left of us are part of a function call
 	"
 	" Nothing interesting is written at the char just before the cursor
 	" This means _anything_ could be started here
@@ -64,7 +62,7 @@ function! erlangcomplete#Complete(findstart, base)
 	endif
 	
 
-	" 3) Function in external module {{{2
+	" 3) Function in external module
 	if line =~ s:erlangExternalFuncBeg
 		let delimiter = match(line, ':[0-9A-Za-z_-]*$') + 1
 		if a:findstart
@@ -75,7 +73,7 @@ function! erlangcomplete#Complete(findstart, base)
 		endif
 	endif
 
-	" 4) Local function {{{2
+	" 4) Local function
 	if line =~ s:erlangLocalFuncBeg
 		let funcstart = match(line, ':\@<![0-9A-Za-z_-]*$')
 		if a:findstart
@@ -85,7 +83,7 @@ function! erlangcomplete#Complete(findstart, base)
 		endif
 	endif
 
-	" 5) Unhandled situation {{{2
+	" 5) Unhandled situation
 	if a:findstart
 		return -1
 	else
@@ -93,8 +91,8 @@ function! erlangcomplete#Complete(findstart, base)
 	endif
 endfunction
 
-" Auxiliary functions for completion {{{1 
-" Find the next non-blank line {{{2
+" Auxiliary functions for completion
+" Find the next non-blank line
 function s:erlangFindNextNonBlank(lnum)
 	let lnum = nextnonblank(a:lnum + 1)
 	let line = getline(lnum)
@@ -104,9 +102,8 @@ function s:erlangFindNextNonBlank(lnum)
    endwhile
    return lnum
 endfunction
-			
-" vim: foldmethod=marker:
-" Find external function names {{{2
+
+" Find external function names
 function s:erlangFindExternalFunc(module, base)
         " If it's a local module, try to compile it
         if filereadable(a:module . '.erl') && !filereadable(a:module . '.beam')
@@ -142,7 +139,7 @@ function s:erlangFindExternalFunc(module, base)
         return []
 endfunction
 
-" Find local function names {{{2
+" Find local function names
 function s:erlangFindLocalFunc(base)
 	" begin at line 1
 	let lnum = s:erlangFindNextNonBlank(1)

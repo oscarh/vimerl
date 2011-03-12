@@ -1,7 +1,6 @@
-" Erlang refactor file
+" Vim refactor file
 " Language:   Erlang
 " Maintainer: Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
-" URL:        http://ktototaki.info
 
 if exists("b:did_ftplugin_erlang")
     finish
@@ -291,5 +290,3 @@ function! ErlangTupleFunArgs(mode)
 endfunction
 nmap <A-r>t :call ErlangTupleFunArgs("n")<ENTER>
 vmap <A-r>t :call ErlangTupleFunArgs("v")<ENTER>
-
-" vim: set foldmethod=marker:

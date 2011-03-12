@@ -35,7 +35,7 @@ function s:ErlangIndentAfterLine(l)
 
     " ignore type annotation lines
     if a:l =~# '^\s*-type'
-	return 0
+        return 0
     endif
 
     while 0<= i && i < length
@@ -140,7 +140,6 @@ function s:FindPrevNonBlankNonComment(lnum)
 endfunction
 
 function ErlangIndent()
-
     " Find a non-blank line above the current line.
     let lnum = prevnonblank(v:lnum - 1)
 
@@ -187,21 +186,4 @@ function ErlangIndent()
         let ind = 0
     endif
     return ind
-
 endfunction
-
-" TODO:
-" 
-" f() ->
-"     x("foo
-"         bar")
-"         ,
-"         bad_indent.
-"
-" fun
-"     init/0,
-"     bad_indent
-"
-"     #rec
-"     .field,
-" bad_indent

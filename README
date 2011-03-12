@@ -73,8 +73,8 @@ differently.
 -- Syntax options:
 The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 
-* Highlight all Erlang bifs as keywords: (default: 0)
-	g:erlangHighlightBif
+* Highlight all Erlang BIFs (functions from `erlang' module) as keywords: (default: 0)
+	g:erlangHighlightBIFs
 
 -- Folding options:
 The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
