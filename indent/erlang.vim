@@ -1,9 +1,10 @@
 " Vim indent file
 " Language:     Erlang
-" Maintainer:   Csaba Hoch <csaba.hoch@gmail.com>
+" Author:       Csaba Hoch <csaba.hoch@gmail.com>
 " Contributor:  Edwin Fine <efine145_nospam01 at usa dot net>
-" Contributor:  Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
-" Last Change:  2010 Aug 30
+"               Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
+"               Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+" Last Change:  2011 Mar 14
 
 " Only load this indent file when no other was loaded.
 if exists("b:did_indent")
@@ -35,8 +36,8 @@ function s:ErlangIndentAfterLine(line)
     let lastReceive = 0 " the last token was a 'receive'; needed for 'after'
     let lastHashMark = 0 " the last token was a 'hashmark'
 
-    " ignore type annotation lines
-    if a:line =~# '^\s*-type'
+    " ignore module attributes, types, specs, ...
+    if a:line =~# '^-'
         return 0
     endif
 
