@@ -2,7 +2,8 @@
 " Language:     Erlang
 " Maintainer:   Csaba Hoch <csaba.hoch@gmail.com>
 " Contributor:  Edwin Fine <efine145_nospam01 at usa dot net>
-" Last Change:  2008 Mar 12
+" Contributor:  Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
+" Last Change:  2010 Aug 30
 
 " Only load this indent file when no other was loaded.
 if exists("b:did_indent")
@@ -95,7 +96,7 @@ function s:ErlangIndentAfterLine(l)
             let m = i+2
             let ind = ind + 1
             let lastReceive = 0
-        elseif a:l[i] == ';'
+        elseif a:l[i] == ';' && a:l[(i):(length)] !~# '.*->.*'
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
@@ -204,8 +205,3 @@ endfunction
 "     #rec
 "     .field,
 " bad_indent
-"
-" case X of
-"     1 when A; B ->
-"     bad_indent
-

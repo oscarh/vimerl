@@ -4,30 +4,65 @@ Vim plugin for the programming language Erlang. The next features
 are implemented:
 	- Syntax highlight
 	- Code folding
-	- Code completion (based on Mod:module_info/0 to use the
+	- Code completion (based on Module:module_info/1 to use the
 			   Erlang introspection mechanism)
 	- Auto-indent
 	- QuickFix
+	- Wrangler support (the refactoring Erlang tool)
+	- Works well with Pathogen (http://www.vim.org/scripts/script.php?script_id=2332)
 
 
 == Installation ==
 
-* Unix
-	- For local installation (one user only) copy the content of the
-	  tarball to your ~/.vim directory
-	- For global installation copy the content of the tarball to
-	  your vim runtime directory (e.g. /usr/share/vim/vimX/)
+* For local installation (one user only) copy the content of the
+  tarball to your `~/.vim' directory.
+* For global installation copy the content of the tarball to
+  your vim runtime directory (e.g. `/usr/share/vim/vimXY/').
+
+
+== Installation with Pathogen ==
+
+Copy the content of the tarball to `~/.vim/bundle/vimerl/'. Then add these lines to
+your vimrc:
+
+	let g:erlangCompleteFile="~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
+	let g:erlangCheckFile="~/.vim/bundle/vimerl/compiler/erlang_check.erl"
 
 
 == Omni completion ==
 
-Write the name of a module (e.g. `my_mod:') presh CTRL-X CTRL-O to activate
+Write the name of a module (e.g. `my_mod:') press CTRL-X CTRL-O to activate
 the omni completion. The omni completion try to use the man pages to give
 the definition for the standard functions. The omni completion try to compile
-local modules, if it is possible, in order to call their Mod:module_info/0.
+local modules, if it is possible, in order to call their Module:module_info/1.
 
 The program `escript' is required, the standard Erlang installation
 comes with it.
+
+
+== Folding ==
+
+To enable it just add to your vimrc `set foldenable'.
+
+
+== Refactoring ==
+
+* Extract to new function:
+    Select the part of code you want to extract (or point something that
+    can be extracted) and press <Alt-r>e. You will be prompted to put the name
+    of new function. After that you can Preview, Confirm or Cancel this
+    refactoring (note: Preview is not currently supported).
+
+* Rename variable/function/module:
+    Point on variable/function that name should be changed and press:
+        <Alt-r>f for function rename
+        <Alt-r>v for variable rename
+    To rename module, press <Alt-r>m anywere in the buffer.
+
+* Tuple function arguments:
+    Select or point on function arguments that should be changed into one tuple
+    and press:
+        <Alt-r>t
 
 
 == Settings ==
@@ -35,31 +70,38 @@ comes with it.
 You can set various variables in your vimrc file to make the plugin behave
 differently.
 
-Syntax options:
+-- Syntax options:
 The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 
 * Highlight all Erlang bifs as keywords: (default: 0)
-	g:erlangHighlightBif 
+	g:erlangHighlightBif
 
-Folding options:
-The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
+-- Folding options:
+The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 
-* Enable/disable folding: (default: 0)
-	g:erlangFold
 * Splitting functions if a new function head appears: (default: 0)
 	g:erlangFoldSplitFunction
 
-Completion options:
-The options expect a string with the path or an integer value like before.
+-- Consulting man pages:
+The option expects a string with the program for the `K' command or an empty
+string to use the global default.
+
+* Set the program for the `K' command: (default: "erl -man")
+	g:erlangKCommand
+
+-- Completion options:
+The options expect a string with the path and an integer value like before.
 
 * Set the location of the Erlang man pages: (default: "/usr/lib/erlang/man")
 	g:erlangManPath
 * Enable/disable using Erlang man pages in the code completion: (default: 1)
 	g:erlangCompletionDisplayDoc
 
-More completion options:
+-- More completion options:
 The options expect a string as below is explained.
 
+* Set the location of the `erlang_complete.erl' script: (default: "~/.vim/autoload/erlang_complete.erl")
+	g:erlangCompleteFile
 * Set the `grep' command to be use when scanning the man pages: (default: "grep")
 	g:erlangCompletionGrep
 * Set the suffix of the man page names: (default: "")
@@ -69,10 +111,27 @@ The options expect a string as below is explained.
 		/ERLANG/PATH/man/man3/lists.3erl.gz
 
 		** So, you must set:
-			let g:erlangCompletionGrep='zgrep'
-			let g:erlangManSuffix='erl\.gz'
+			let g:erlangCompletionGrep="zgrep"
+			let g:erlangManSuffix="erl\.gz"
 
 	- In another systems, Erlang man pages are placed like this:
 		/ERLANG/PATH/man/man3/lists.3
 
 		** In this case, use the default options value **
+
+-- Compiler options:
+The options expect a string with the path and an integer value like before.
+
+* Set the location of the `erlang_check.erl' script: (default: "~/.vim/compiler/erlang_check.erl")
+        g:erlangCheckFile
+* Enable/disable highlighting erlang errors: (default 1)
+        g:erlangHighlightErrors
+
+	- This option makes try to compile the current file each time it is saved
+	  highlighting the errors.
+
+-- Refactoring options:
+The option expects a string with the path.
+
+* Set the location of the Wrangler tool: (default: "/usr/share/wrangler/")
+        g:erlangWranglerPath
