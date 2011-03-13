@@ -19,12 +19,14 @@ if exists("*ErlangIndent")
    finish
 endif
 
-" The function go through the whole line, analyses it and sets the indentation
-" (ind variable).
-" l: the number of the line to be examined.
-function s:ErlangIndentAfterLine(l)
+" The function goes through the whole line, analyses it and returns the
+" indentation level.
+"
+" line: the line to be examined.
+" return ind: the indentation level of the examined line.
+function s:ErlangIndentAfterLine(line)
     let i = 0 " the index of the current character in the line
-    let length = strlen(a:l) " the length of the line
+    let linelen = strlen(a:line) " the length of the line
     let ind = 0 " how much should be the difference between the indentation of
                 " the current line and the indentation of the next line?
                 " e.g. +1: the indentation of the next line should be equal to
@@ -34,57 +36,56 @@ function s:ErlangIndentAfterLine(l)
     let lastHashMark = 0 " the last token was a 'hashmark'
 
     " ignore type annotation lines
-    if a:l =~# '^\s*-type'
+    if a:line =~# '^\s*-type'
         return 0
     endif
 
-    while 0<= i && i < length
-
+    while 0<= i && i < linelen
         " m: the next value of the i
-        if a:l[i] == '%'
+        if a:line[i] == '%'
             break
-        elseif a:l[i] == '"'
-            let m = matchend(a:l,'"\%([^"\\]\|\\.\)*"',i)
+        elseif a:line[i] == '"'
+            let m = matchend(a:line,'"\%([^"\\]\|\\.\)*"',i)
             let lastReceive = 0
-        elseif a:l[i] == "'"
-            let m = matchend(a:l,"'[^']*'",i)
+        elseif a:line[i] == "'"
+            let m = matchend(a:line,"'[^']*'",i)
             let lastReceive = 0
-        elseif a:l[i] =~# "[a-z]"
-            let m = matchend(a:l,".[[:alnum:]_]*",i)
+        elseif a:line[i] =~# "[a-z]"
+            let m = matchend(a:line,".[[:alnum:]_]*",i)
             if lastFun
                 let ind = ind - 1
                 let lastFun = 0
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~# '^\%(case\|if\|try\)$'
+            elseif a:line[(i):(m-1)] =~# '^\%(case\|if\|try\)$'
                 let ind = ind + 1
-            elseif a:l[(i):(m-1)] =~# '^receive$'
+            elseif a:line[(i):(m-1)] =~# '^receive$'
                 let ind = ind + 1
                 let lastReceive = 1
-            elseif a:l[(i):(m-1)] =~# '^begin$'
+            elseif a:line[(i):(m-1)] =~# '^begin$'
                 let ind = ind + 2
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~# '^end$'
+            elseif a:line[(i):(m-1)] =~# '^end$'
                 let ind = ind - 2
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~# '^after$'
+            elseif a:line[(i):(m-1)] =~# '^after$'
                 if lastReceive == 0
                     let ind = ind - 1
                 else
                     let ind = ind + 0
                 endif
                 let lastReceive = 0
-            elseif a:l[(i):(m-1)] =~# '^fun$'
+            elseif a:line[(i):(m-1)] =~# '^fun$'
                 let ind = ind + 1
                 let lastFun = 1
                 let lastReceive = 0
             endif
-        elseif a:l[i] =~# "[A-Z_]"
-            let m = matchend(a:l,".[[:alnum:]_]*",i)
+        elseif a:line[i] =~# "[A-Z_]"
+            let m = matchend(a:line,".[[:alnum:]_]*",i)
             let lastReceive = 0
-        elseif a:l[i] == '$'
+        elseif a:line[i] == '$'
             let m = i+2
             let lastReceive = 0
-        elseif a:l[i] == "." && (i+1>=length || a:l[i+1]!~ "[0-9]")
+        elseif a:line[i] == "." && (i+1>=linelen || a:line[i+1]!~ "[0-9]")
             let m = i+1
             if lastHashMark
                 let lastHashMark = 0
@@ -92,24 +93,24 @@ function s:ErlangIndentAfterLine(l)
                 let ind = ind - 1
             endif
             let lastReceive = 0
-        elseif a:l[i] == '-' && (i+1<length && a:l[i+1]=='>')
+        elseif a:line[i] == '-' && (i+1<linelen && a:line[i+1]=='>')
             let m = i+2
             let ind = ind + 1
             let lastReceive = 0
-        elseif a:l[i] == ';' && a:l[(i):(length)] !~# '.*->.*'
+        elseif a:line[i] == ';' && a:line[(i):(linelen)] !~# '.*->.*'
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
-        elseif a:l[i] == '#'
+        elseif a:line[i] == '#'
             let m = i+1
             let lastHashMark = 1
-        elseif a:l[i] =~# '[({[]'
+        elseif a:line[i] =~# '[({[]'
             let m = i+1
             let ind = ind + 1
             let lastFun = 0
             let lastReceive = 0
             let lastHashMark = 0
-        elseif a:l[i] =~# '[)}\]]'
+        elseif a:line[i] =~# '[)}\]]'
             let m = i+1
             let ind = ind - 1
             let lastReceive = 0
@@ -118,11 +119,9 @@ function s:ErlangIndentAfterLine(l)
         endif
 
         let i = m
-
     endwhile
 
     return ind
-
 endfunction
 
 function s:FindPrevNonBlankNonComment(lnum)
