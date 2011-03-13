@@ -32,89 +32,87 @@ function s:ErlangIndentAfterLine(line)
                 " the current line and the indentation of the next line?
                 " e.g. +1: the indentation of the next line should be equal to
                 " the indentation of the current line plus one shiftwidth
-    let lastFun = 0 " the last token was a 'fun'
-    let lastReceive = 0 " the last token was a 'receive'; needed for 'after'
-    let lastHashMark = 0 " the last token was a 'hashmark'
+    let last_fun = 0 " the last token was a 'fun'
+    let last_receive = 0 " the last token was a 'receive'; needed for 'after'
+    let last_hash_sym = 0 " the last token was a '#'
 
-    " ignore module attributes, types, specs, ...
-    if a:line =~# '^-'
+    " Ignore comments, module attributes, types, specs, ...
+    if a:line =~# '^\s*%' || a:line =~# '^-'
         return 0
     endif
 
-    while 0<= i && i < linelen
+    while 0<= i && i<linelen
         " m: the next value of the i
-        if a:line[i] == '%'
-            break
-        elseif a:line[i] == '"'
+        if a:line[i] == '"'
             let m = matchend(a:line,'"\%([^"\\]\|\\.\)*"',i)
-            let lastReceive = 0
+            let last_receive = 0
         elseif a:line[i] == "'"
             let m = matchend(a:line,"'[^']*'",i)
-            let lastReceive = 0
+            let last_receive = 0
         elseif a:line[i] =~# "[a-z]"
             let m = matchend(a:line,".[[:alnum:]_]*",i)
-            if lastFun
+            if last_fun
                 let ind = ind - 1
-                let lastFun = 0
-                let lastReceive = 0
+                let last_fun = 0
+                let last_receive = 0
             elseif a:line[(i):(m-1)] =~# '^\%(case\|if\|try\)$'
                 let ind = ind + 1
             elseif a:line[(i):(m-1)] =~# '^receive$'
                 let ind = ind + 1
-                let lastReceive = 1
+                let last_receive = 1
             elseif a:line[(i):(m-1)] =~# '^begin$'
                 let ind = ind + 2
-                let lastReceive = 0
+                let last_receive = 0
             elseif a:line[(i):(m-1)] =~# '^end$'
                 let ind = ind - 2
-                let lastReceive = 0
+                let last_receive = 0
             elseif a:line[(i):(m-1)] =~# '^after$'
-                if lastReceive == 0
+                if last_receive == 0
                     let ind = ind - 1
                 else
                     let ind = ind + 0
                 endif
-                let lastReceive = 0
+                let last_receive = 0
             elseif a:line[(i):(m-1)] =~# '^fun$'
                 let ind = ind + 1
-                let lastFun = 1
-                let lastReceive = 0
+                let last_fun = 1
+                let last_receive = 0
             endif
         elseif a:line[i] =~# "[A-Z_]"
             let m = matchend(a:line,".[[:alnum:]_]*",i)
-            let lastReceive = 0
+            let last_receive = 0
         elseif a:line[i] == '$'
             let m = i+2
-            let lastReceive = 0
+            let last_receive = 0
         elseif a:line[i] == "." && (i+1>=linelen || a:line[i+1]!~ "[0-9]")
             let m = i+1
-            if lastHashMark
-                let lastHashMark = 0
+            if last_hash_sym
+                let last_hash_sym = 0
             else
                 let ind = ind - 1
             endif
-            let lastReceive = 0
+            let last_receive = 0
         elseif a:line[i] == '-' && (i+1<linelen && a:line[i+1]=='>')
             let m = i+2
             let ind = ind + 1
-            let lastReceive = 0
+            let last_receive = 0
         elseif a:line[i] == ';' && a:line[(i):(linelen)] !~# '.*->.*'
             let m = i+1
             let ind = ind - 1
-            let lastReceive = 0
+            let last_receive = 0
         elseif a:line[i] == '#'
             let m = i+1
-            let lastHashMark = 1
+            let last_hash_sym = 1
         elseif a:line[i] =~# '[({[]'
             let m = i+1
             let ind = ind + 1
-            let lastFun = 0
-            let lastReceive = 0
-            let lastHashMark = 0
+            let last_fun = 0
+            let last_receive = 0
+            let last_hash_sym = 0
         elseif a:line[i] =~# '[)}\]]'
             let m = i+1
             let ind = ind - 1
-            let lastReceive = 0
+            let last_receive = 0
         else
             let m = i+1
         endif
@@ -128,7 +126,7 @@ endfunction
 function s:FindPrevNonBlankNonComment(lnum)
     let lnum = prevnonblank(a:lnum)
     let line = getline(lnum)
-    " continue to search above if the current line begins with a '%'
+    " Continue to search above if the current line begins with a '%'
     while line =~# '^\s*%.*$'
         let lnum = prevnonblank(lnum - 1)
         if 0 == lnum
@@ -153,7 +151,7 @@ function ErlangIndent()
 
     let ind = indent(lnum) + &sw * s:ErlangIndentAfterLine(prevline)
 
-    " special cases:
+    " Special cases:
     if prevline =~# '^\s*\%(after\|end\)\>'
         let ind = ind + 2*&sw
     endif
