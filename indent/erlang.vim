@@ -6,7 +6,7 @@
 "               Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 " Last Change:  2011 Mar 14
 
-" Only load this indent file when no other was loaded.
+" Only load this indent file when no other was loaded
 if exists("b:did_indent")
   finish
 endif
@@ -15,7 +15,7 @@ let b:did_indent = 1
 setlocal indentexpr=ErlangIndent()
 setlocal indentkeys+==after,=end,=catch,=),=],=}
 
-" Only define the functions once.
+" Only define the functions once
 if exists("*ErlangIndent")
    finish
 endif
@@ -23,8 +23,8 @@ endif
 " The function goes through the whole line, analyses it and returns the
 " indentation level.
 "
-" line: the line to be examined.
-" return ind: the indentation level of the examined line.
+" line: the line to be examined
+" return: the indentation level of the examined line
 function s:ErlangIndentAfterLine(line)
     let i = 0 " the index of the current character in the line
     let linelen = strlen(a:line) " the length of the line
@@ -36,12 +36,22 @@ function s:ErlangIndentAfterLine(line)
     let last_receive = 0 " the last token was a 'receive'; needed for 'after'
     let last_hash_sym = 0 " the last token was a '#'
 
-    " Ignore comments, module attributes, types, specs, ...
-    if a:line =~# '^\s*%' || a:line =~# '^-'
+    " Ignore comments
+    if a:line =~# '^\s*%'
         return 0
     endif
 
-    while 0<= i && i<linelen
+    " Partial function head where the guard is missing
+    if a:line =~# "\\(^\\l[[:alnum:]_]*\\)\\|\\(^'[^']\\+'\\)(" && a:line !~# '->'
+        return 2
+    endif
+
+    " The missing guard from the split function head
+    if a:line =~# '^\s*when\s\+.*->'
+        return -1
+    endif
+
+    while 0<=i && i<linelen
         " m: the next value of the i
         if a:line[i] == '"'
             let m = matchend(a:line,'"\%([^"\\]\|\\.\)*"',i)
@@ -138,10 +148,10 @@ function s:FindPrevNonBlankNonComment(lnum)
 endfunction
 
 function ErlangIndent()
-    " Find a non-blank line above the current line.
+    " Find a non-blank line above the current line
     let lnum = prevnonblank(v:lnum - 1)
 
-    " Hit the start of the file, use zero indent.
+    " Hit the start of the file, use zero indent
     if lnum == 0
         return 0
     endif
