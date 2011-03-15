@@ -63,7 +63,7 @@ syn match erlangRecord                       /#\w\+/
 syn match erlangTuple                        /{\|}/
 syn match erlangList                         /\[\|\]/
 
-syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|deprecated\|module\|export\|import\|behaviour\|export_type\) *(\@=/
+    syn match erlangAttribute                    /^-\%(vsn\|author\|copyright\|compile\|deprecated\|module\|export\|import\|behaviour\|export_type\|ignore_xref\) *(\@=/
 syn match erlangInclude                      /^-include\%(_lib\)\?\s*(\@=/
 syn match erlangRecordDef                    /^-record\s*(\@=/
 syn match erlangDefine                       /^-\%(define\|undef\)\s*(\@=/
