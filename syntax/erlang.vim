@@ -105,7 +105,6 @@ hi link erlangFloat          Number
 hi link erlangFloat          Number
 hi link erlangFloat          Number
 hi link erlangHex            Number
-hi link erlangBIF            Keyword
 hi link erlangFun            Keyword
 hi link erlangList           Delimiter
 hi link erlangTuple          Delimiter
@@ -117,6 +116,7 @@ hi link erlangBitSize        Number
 
 " Optional linking
 if exists("g:erlangHighlightBIFs") && g:erlangHighlightBIFs
+	hi link erlangBIF    Keyword
 	hi link erlangGBIF   Keyword
 endif
 
