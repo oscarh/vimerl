@@ -37,13 +37,6 @@ function! erlangcomplete#Complete(findstart, base)
 	let column = col('.') 
 	let line = strpart(getline('.'), 0, column - 1)
 
-	" 1) First, check if completion is impossible
-	if line =~ '[^~\\]%'
-		return -1
-	endif
-
-	"echo "line[col - 1]:" . line[column - 1] . " line[col - 2]:" . line[column - 2] .  "\n" . line . "\n"
-
 	" 2) Check if the char to the left of us are part of a function call
 	"
 	" Nothing interesting is written at the char just before the cursor
