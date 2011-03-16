@@ -1,8 +1,7 @@
 " Vim syntax file
 " Language:   Erlang
-" Maintainer: Oscar Hellström <oscar@oscarh.net>
-" URL:        http://oscar.hellstrom.st
-" Version:    2010-08-09
+" Maintainer: Oscar Hellström <oscar@oscarh.net> (http://oscar.hellstrom.st)
+" Version:    2011/03/16
 
 " Setup
 " For version 5.x: Clear all syntax items

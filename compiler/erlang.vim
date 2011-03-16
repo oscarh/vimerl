@@ -1,6 +1,7 @@
 " Vim compiler file
 " Language:   Erlang
 " Maintainer: Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
+" Version:    2011/03/16
 
 if exists("current_compiler")
     finish

@@ -1,9 +1,9 @@
 " Vim ftplugin file
 " Language:     Erlang
 " Author:       Oscar Hellström <oscar@oscarh.net>
+" Version:      2011/03/10
 " Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 "               Eduardo Lopez (http://github.com/tapichu)
-" Version:      2011/03/10
 
 " Plugin init
 if exists("b:did_ftplugin")

@@ -1,10 +1,10 @@
 " Vim indent file
 " Language:     Erlang
 " Author:       Csaba Hoch <csaba.hoch@gmail.com>
+" Version:      2011/03/14
 " Contributor:  Edwin Fine <efine145_nospam01 at usa dot net>
 "               Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
 "               Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
-" Last Change:  2011 Mar 14
 
 " Only load this indent file when no other was loaded
 if exists("b:did_indent")

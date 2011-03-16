@@ -1,6 +1,7 @@
 " Vim refactor file
 " Language:   Erlang
 " Maintainer: Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
+" Version:    2011/03/12
 
 if exists("b:did_ftplugin_erlang")
     finish
