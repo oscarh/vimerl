@@ -68,7 +68,7 @@ function! erlangcomplete#Complete(findstart, base)
 		if a:findstart
 			return delimiter
 		else
-                        let module = matchstr(line[:-2], '\<\k*\>$')
+			let module = matchstr(line[:-2], '\<\k*\>$')
 			return s:erlangFindExternalFunc(module, a:base)
 		endif
 	endif
@@ -113,7 +113,7 @@ function s:erlangFindExternalFunc(module, base)
         let functions = system(g:erlangCompleteFile . ' ' . a:module)
         for element in sort(split(functions, '\n'))
             if match(element, a:base) == 0
-                let function_name = matchstr(element, a:base . '\w\+')
+                let function_name = matchstr(element, a:base . '\w*')
                 let number_of_args = matchstr(element, '\d\+', len(function_name))
                 let number_of_comma = max([number_of_args - 1, 0])
                 let file_path = g:erlangManPath . '/man?/' . a:module . '\.?' . g:erlangManSuffix
