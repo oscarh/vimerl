@@ -46,17 +46,15 @@ function! HighlightErlangErrors()
 endfunction
 
 function! s:show_msg()
-    if exists('b:error_list')
-        let pos = getpos(".")
-        if has_key(b:error_list, pos[1])
-            let item = get(b:error_list, pos[1])
-            echo item.msg
-            let b:is_showing_msg = 1
-        else
-            if exists("b:is_showing_msg") && b:is_showing_msg == 1
-                echo
-                let b:is_showing_msg = 0
-            endif
+    let pos = getpos(".")
+    if has_key(b:error_list, pos[1])
+        let item = get(b:error_list, pos[1])
+        echo item.msg
+        let b:is_showing_msg = 1
+    else
+        if exists("b:is_showing_msg") && b:is_showing_msg == 1
+            echo
+            let b:is_showing_msg = 0
         endif
     endif
 endf
