@@ -62,7 +62,7 @@ syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|else\|endif\)\
 syn match erlangType                         /^-\%(spec\|type\)[( ]\@=/
 
 syn match erlangMacro                        /\%(-define(\)\@<=\w\+/
-syn match erlangMacro                        /?\w\+/
+syn match erlangMacro                        /?\??\w\+/
 
 syn match erlangBitType                      /\%(\/\|-\)\@<=\%(bits\|bitstring\|binary\|integer\|float\|unit\)\>/
 syn match erlangBitSize                      /:\@<=[0-9]\+/
