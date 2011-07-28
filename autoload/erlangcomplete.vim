@@ -11,7 +11,7 @@
 let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
 let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
 let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
-let s:erlangCompletionPath  = '~/.vim/autoload/erlang_completion.erl'
+let s:erlangCompletionPath  = expand('<sfile>:p:h') . '/erlang_completion.erl'
 
 if !exists('g:erlangCompletionGrep')
 	let g:erlangCompletionGrep = 'grep'
