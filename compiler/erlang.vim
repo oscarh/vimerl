@@ -1,42 +1,41 @@
 " Vim compiler file
 " Language:   Erlang
 " Maintainer: Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
-" Version:    2011/03/16
+"             Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+" Version:    2011/08/06
 
 if exists("current_compiler")
     finish
+else
+    let current_compiler = "erlang"
 endif
-let current_compiler = "erlang"
 
 if exists(":CompilerSet") != 2
     command -nargs=* CompilerSet setlocal <args>
 endif
 
-if !exists('g:erlangCheckFile')
-    let g:erlangCheckFile = "~/.vim/compiler/erlang_check.erl"
-endif
-
-if !exists('g:erlangHighlightErrors')
+if !exists("g:erlangHighlightErrors")
     let g:erlangHighlightErrors = 1
 endif
 
-let b:error_list = {}
-let b:is_showing_msg = 0
+let s:erlangCheckFile = expand("<sfile>:p:h") . "/erlang_completion.erl"
+let b:error_list      = {}
+let b:is_showing_msg  = 0
 
 function! HighlightErlangErrors()
     if match(getline(1), "#!.*escript") != -1
         setlocal makeprg=escript\ -s\ %
     else
-        execute "setlocal makeprg=" . g:erlangCheckFile . "\\ \%"
+        execute "setlocal makeprg=" . s:erlangCheckFile . "\\ \%"
     endif
     silent make!
     call s:clear_matches()
     for error in getqflist()
         let item = {}
-        let item['lnum'] = error.lnum
-        let item['msg'] = error.text
+        let item["lnum"] = error.lnum
+        let item["msg"] = error.text
         let b:error_list[error.lnum] = item
-        call matchadd('SpellBad', "\\%" . error.lnum . "l")
+        call matchadd("SpellBad", "\\%" . error.lnum . "l")
     endfor
     if len(getqflist())
         redraw!
