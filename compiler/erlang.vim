@@ -18,7 +18,7 @@ if !exists("g:erlangHighlightErrors")
     let g:erlangHighlightErrors = 1
 endif
 
-let s:erlangCheckFile = expand("<sfile>:p:h") . "/erlang_completion.erl"
+let s:erlangCheckFile = expand("<sfile>:p:h") . "/erlang_check.erl"
 let b:error_list      = {}
 let b:is_showing_msg  = 0
 
