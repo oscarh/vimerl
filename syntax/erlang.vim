@@ -1,9 +1,9 @@
 " Vim syntax file
-" Language:   Erlang
-" Maintainer: Oscar Hellström <oscar@oscarh.net> (http://oscar.hellstrom.st)
-" Version:    2011/03/16
+" Language:     Erlang
+" Author:       Oscar Hellström <oscar@oscarh.net> (http://oscar.hellstrom.st)
+" Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+" Version:      2011/03/16
 
-" Setup
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
 if version < 600

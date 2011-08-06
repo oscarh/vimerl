@@ -1,14 +1,13 @@
 " Vim refactor file
-" Language:   Erlang
-" Maintainer: Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
-" Version:    2011/03/12
+" Language: Erlang
+" Author:   Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
+" Version:  2011/03/12
 
 if exists("b:did_ftplugin_erlang")
     finish
+else
+    let b:did_ftplugin_erlang = 1
 endif
-
-" Don't load any other
-let b:did_ftplugin_erlang=1
 
 if !exists('g:erlangRefactoring') || g:erlangRefactoring == 0
     finish

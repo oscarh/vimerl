@@ -1,20 +1,19 @@
 " Vim ftplugin file
 " Language:     Erlang
 " Author:       Oscar Hellström <oscar@oscarh.net>
-" Version:      2011/03/10
 " Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 "               Eduardo Lopez (http://github.com/tapichu)
+" Version:      2011/03/10
 
 " Plugin init
-if exists("b:did_ftplugin")
+if exists('b:did_ftplugin')
 	finish
+else
+	let b:did_ftplugin = 1
 endif
 
-" Don't load any other
-let b:did_ftplugin=1
-
 if !exists('g:erlangKCommand')
-	let g:erlangKCommand='erl -man'
+	let g:erlangKCommand = 'erl -man'
 endif
 
 if exists('s:doneFunctionDefinitions')
@@ -22,7 +21,7 @@ if exists('s:doneFunctionDefinitions')
 	finish
 endif
 
-let s:doneFunctionDefinitions=1
+let s:doneFunctionDefinitions = 1
 
 " Local settings
 function s:SetErlangOptions()
@@ -40,12 +39,12 @@ function s:SetErlangOptions()
 	setlocal formatoptions+=ro
 
 	if g:erlangKCommand != ''
-		let &l:keywordprg=g:erlangKCommand
+		let &l:keywordprg = g:erlangKCommand
 	endif
 endfunction
 
 " Define folding functions
-if !exists("*GetErlangFold")
+if !exists('*GetErlangFold')
 	" Folding params
 	let s:ErlangFunBegin    = '^\a\w*(.*$'
 	let s:ErlangFunEnd      = '^[^%]*\.\s*\(%.*\)\?$'
@@ -72,7 +71,7 @@ if !exists("*GetErlangFold")
 		while str !~ '->\s*\(%.*\)\?$'
 			let lnum = s:GetNextNonBlank(lnum)
 			if 0 == lnum " EOF
-				return ""
+				return ''
 			endif
 			let str .= getline(lnum)
 		endwhile
@@ -91,11 +90,11 @@ if !exists("*GetErlangFold")
 
 		" FIXME: Use searchpair?
 		while arguments =~ erlangTuple
-			let arguments = substitute(arguments, erlangTuple, "A", "g")
+			let arguments = substitute(arguments, erlangTuple, 'A', 'g')
 		endwhile
 		" FIXME: Use searchpair?
 		while arguments =~ erlangList
-			let arguments = substitute(arguments, erlangList, "A", "g")
+			let arguments = substitute(arguments, erlangList, 'A', 'g')
 		endwhile
 		
 		let len = strlen(arguments)
@@ -116,7 +115,7 @@ if !exists("*GetErlangFold")
 		endif
 
 		if line =~ s:ErlangFunBegin && foldlevel(lnum - 1) == 1
-			if exists("g:erlangFoldSplitFunction") && g:erlangFoldSplitFunction
+			if exists('g:erlangFoldSplitFunction') && g:erlangFoldSplitFunction
 				return '>1'
 			else
 				return '1'
@@ -134,16 +133,16 @@ if !exists("*GetErlangFold")
 	function ErlangFoldText()
 		let foldlen = v:foldend - v:foldstart
 		if 1 < foldlen
-			let lines = "lines"
+			let lines = 'lines'
 		else
-			let lines = "line"
+			let lines = 'line'
 		endif
 		let line = getline(v:foldstart)
 		let name = s:GetFunName(line)
 		let arguments = s:GetFunArgs(strpart(line, strlen(name)), v:foldstart)
 		let argcount = s:CountFunArgs(arguments)
-		let retval = "+" . v:folddashes . " " . name . "/" . argcount
-		let retval .= " (" . foldlen . " " . lines . ")"
+		let retval = '+' . v:folddashes . ' ' . name . '/' . argcount
+		let retval .= ' (' . foldlen . ' ' . lines . ')'
 		return retval
 	endfunction
 endif

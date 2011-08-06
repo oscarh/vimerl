@@ -1,8 +1,8 @@
 " Vim compiler file
-" Language:   Erlang
-" Maintainer: Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
-"             Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
-" Version:    2011/08/06
+" Language:     Erlang
+" Author:       Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
+" Contributors: Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+" Version:      2011/08/06
 
 if exists("current_compiler")
     finish

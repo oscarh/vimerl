@@ -1,23 +1,24 @@
 " Vim indent file
 " Language:     Erlang
 " Author:       Csaba Hoch <csaba.hoch@gmail.com>
-" Version:      2011/03/14
-" Contributor:  Edwin Fine <efine145_nospam01 at usa dot net>
+" Contributors: Edwin Fine <efine145_nospam01 at usa dot net>
 "               Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
 "               Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
+" Version:      2011/03/14
 
 " Only load this indent file when no other was loaded
 if exists("b:did_indent")
-  finish
+    finish
+else
+    let b:did_indent = 1
 endif
-let b:did_indent = 1
 
 setlocal indentexpr=ErlangIndent()
 setlocal indentkeys+==after,=end,=catch,=),=],=}
 
 " Only define the functions once
 if exists("*ErlangIndent")
-   finish
+    finish
 endif
 
 " The function goes through the whole line, analyses it and returns the
