@@ -1,20 +1,12 @@
 " Vim omni completion file
 " Language:     Erlang
 " Author:       Oscar Hellström <oscar@oscarh.net>
-" Version:      2011/03/16
 " Contributors: kTT (http://github.com/kTT)
 "               Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
 "               Eduardo Lopez (http://github.com/tapichu)
+" Version:      2011/08/06
 
-" Patterns for completions
-let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
-let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
-let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
-
-if !exists('g:erlangCompleteFile')
-	let g:erlangCompleteFile = '~/.vim/autoload/erlang_complete.erl'
-endif
-
+" Completion options
 if !exists('g:erlangCompletionGrep')
 	let g:erlangCompletionGrep = 'grep'
 endif
@@ -30,6 +22,14 @@ endif
 if !exists('g:erlangCompletionDisplayDoc')
 	let g:erlangCompletionDisplayDoc = 1
 endif
+
+" Completion program path
+let s:erlangCompleteFile = expand('<sfile>:p:h') . '/erlang_complete.erl'
+
+" Patterns for completions
+let s:erlangLocalFuncBeg    = '\(\<[0-9A-Za-z_-]*\|\s*\)$'
+let s:erlangExternalFuncBeg = '\<[0-9A-Za-z_-]\+:[0-9A-Za-z_-]*$'
+let s:ErlangBlankLine       = '^\s*\(%.*\)\?$'
 
 " Main function for completion
 function! erlangcomplete#Complete(findstart, base)
@@ -105,7 +105,7 @@ function s:erlangFindExternalFunc(module, base)
 		redraw!
 	endif
 
-	let functions = system(g:erlangCompleteFile . ' ' . a:module)
+	let functions = system(s:erlangCompleteFile . ' ' . a:module)
 	for element in sort(split(functions, '\n'))
 		if match(element, a:base) == 0
 			let function_name = matchstr(element, a:base . '\w*')
