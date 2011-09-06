@@ -4,7 +4,7 @@
 " Contributors: Edwin Fine <efine145_nospam01 at usa dot net>
 "               Pawel 'kTT' Salata <rockplayer.pl@gmail.com>
 "               Ricardo Catalinas Jiménez <jimenezrick@gmail.com>
-" Version:      2011/03/14
+" Version:      2011/09/06
 
 " Only load this indent file when no other was loaded
 if exists("b:did_indent")
@@ -27,14 +27,14 @@ endif
 " line: the line to be examined
 " return: the indentation level of the examined line
 function s:ErlangIndentAfterLine(line)
-    let i = 0 " the index of the current character in the line
     let linelen = strlen(a:line) " the length of the line
+    let i       = 0 " the index of the current character in the line
     let ind = 0 " how much should be the difference between the indentation of
                 " the current line and the indentation of the next line?
                 " e.g. +1: the indentation of the next line should be equal to
                 " the indentation of the current line plus one shiftwidth
-    let last_fun = 0 " the last token was a 'fun'
-    let last_receive = 0 " the last token was a 'receive'; needed for 'after'
+    let last_fun      = 0 " the last token was a 'fun'
+    let last_receive  = 0 " the last token was a 'receive'; needed for 'after'
     let last_hash_sym = 0 " the last token was a '#'
 
     " Ignore comments
@@ -148,6 +148,15 @@ function s:FindPrevNonBlankNonComment(lnum)
     return lnum
 endfunction
 
+" The function returns the indentation level of the line adjusted to a mutiple
+" of 'shiftwidth' option.
+"
+" lnum: line number
+" return: the indentation level of the line
+function s:GetLineIndent(lnum)
+    return (indent(a:lnum) / &sw) * &sw
+endfunction
+
 function ErlangIndent()
     " Find a non-blank line above the current line
     let lnum = prevnonblank(v:lnum - 1)
@@ -160,7 +169,12 @@ function ErlangIndent()
     let prevline = getline(lnum)
     let currline = getline(v:lnum)
 
-    let ind = indent(lnum) + &sw * s:ErlangIndentAfterLine(prevline)
+    let ind_after = s:ErlangIndentAfterLine(prevline)
+    if ind_after != 0
+        let ind = s:GetLineIndent(lnum) + ind_after * &sw
+    else
+        let ind = indent(lnum) + ind_after * &sw
+    endif
 
     " Special cases:
     if prevline =~# '^\s*\%(after\|end\)\>'
@@ -172,8 +186,8 @@ function ErlangIndent()
     if currline =~# '^\s*after\>'
         let plnum = s:FindPrevNonBlankNonComment(v:lnum-1)
         if getline(plnum) =~# '^[^%]*\<receive\>\s*\%(%.*\)\=$'
-            let ind = ind - 1*&sw
             " If the 'receive' is not in the same line as the 'after'
+            let ind = ind - 1*&sw
         else
             let ind = ind - 2*&sw
         endif
