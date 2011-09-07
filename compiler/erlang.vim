@@ -14,8 +14,12 @@ if exists(":CompilerSet") != 2
     command -nargs=* CompilerSet setlocal <args>
 endif
 
-if !exists("g:erlangHighlightErrors")
-    let g:erlangHighlightErrors = 1
+if !exists('g:erlangCheckFile')
+    let g:erlangCheckFile = "~/.vim/compiler/erlang_check_file.erl"
+endif
+
+if !exists('g:erlangHighlightErrors')
+    let g:erlangHighlightErrors = 0
 endif
 
 let s:erlangCheckFile = expand("<sfile>:p:h") . "/erlang_check.erl"
