@@ -1,4 +1,5 @@
-=== Vim Erlang plugin ===
+  Vim Erlang plugin
+=====================
 
 Vim plugin for the programming language Erlang. The next features
 are implemented:
@@ -18,15 +19,6 @@ are implemented:
   tarball to your `~/.vim' directory.
 * For global installation copy the content of the tarball to
   your vim runtime directory (e.g. `/usr/share/vim/vimXY/').
-
-
-== Installation with Pathogen ==
-
-Copy the content of the tarball to `~/.vim/bundle/vimerl/'. Then add these lines to
-your vimrc:
-
-	let g:erlangCompleteFile="~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
-	let g:erlangCheckFile="~/.vim/bundle/vimerl/compiler/erlang_check.erl"
 
 
 == Omni completion ==
@@ -71,10 +63,10 @@ You can set various variables in your vimrc file to make the plugin behave
 differently.
 
 -- Syntax options:
-The options expect a 0 value for disabling and a non-zero (e.g. 1) for enabling.
+The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 
-* Highlight all Erlang bifs as keywords: (default: 0)
-	g:erlangHighlightBif
+* Highlight all Erlang BIFs (functions from `erlang' module) as keywords: (default: 0)
+	g:erlangHighlightBIFs
 
 -- Folding options:
 The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
@@ -82,7 +74,7 @@ The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 * Splitting functions if a new function head appears: (default: 0)
 	g:erlangFoldSplitFunction
 
--- Consulting man pages:
+-- Consulting man pages options:
 The option expects a string with the program for the `K' command or an empty
 string to use the global default.
 
@@ -97,11 +89,8 @@ The options expect a string with the path and an integer value like before.
 * Enable/disable using Erlang man pages in the code completion: (default: 1)
 	g:erlangCompletionDisplayDoc
 
--- More completion options:
 The options expect a string as below is explained.
 
-* Set the location of the `erlang_complete.erl' script: (default: "~/.vim/autoload/erlang_complete.erl")
-	g:erlangCompleteFile
 * Set the `grep' command to be use when scanning the man pages: (default: "grep")
 	g:erlangCompletionGrep
 * Set the suffix of the man page names: (default: "")
@@ -120,10 +109,8 @@ The options expect a string as below is explained.
 		** In this case, use the default options value **
 
 -- Compiler options:
-The options expect a string with the path and an integer value like before.
+The option expects a 0 value for disabling and a non-zero (e.g. 1) for enabling.
 
-* Set the location of the `erlang_check.erl' script: (default: "~/.vim/compiler/erlang_check.erl")
-        g:erlangCheckFile
 * Enable/disable highlighting erlang errors: (default 1)
         g:erlangHighlightErrors
 
