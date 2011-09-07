@@ -17,7 +17,7 @@ if !exists('g:erlangCheckFile')
 endif
 
 if !exists('g:erlangHighlightErrors')
-    let g:erlangHighlightErrors = 1
+    let g:erlangHighlightErrors = 0
 endif
 
 let b:error_list = {}
