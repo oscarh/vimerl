@@ -57,6 +57,7 @@ syn region erlangString                      start=/"/ end=/"/ skip=/\\/ contain
 syn match erlangVariable                     /\<[A-Z_]\w*\>/
 syn match erlangAtom                         /\%(\%(^-\)\|#\)\@<!\<[a-z][A-Za-z0-9_]*\>\%(\s*[(:]\)\@!/
 syn match erlangAtom                         /\\\@<!'[^']*\\\@<!'/
+syn match erlangModule                       /\%([a-z_0-9]\+\):/
 
 syn match erlangRecord                       /#\w\+/
 
@@ -68,6 +69,7 @@ syn match erlangInclude                      /^-include\%(_lib\)\?\s*(\@=/
 syn match erlangRecordDef                    /^-record\s*(\@=/
 syn match erlangDefine                       /^-\%(define\|undef\)\s*(\@=/
 syn match erlangPreCondit                    /^-\%(ifdef\|ifndef\|else\|endif\)\%(\s*(\@=\)\?/
+syn match erlangPreProc                      /^-\%([a-z_]\+\)/
 
 syn match erlangType                         /^-\%(spec\|type\)[( ]\@=/
 
